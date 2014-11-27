@@ -18,8 +18,8 @@ def home(request):
             Clarification.objects.create(question=q)
         return HttpResponseRedirect(reverse("clarification.views.home"))
 
-    bulletin_content = Bulletin.objects.all()
-    clarification_content = Clarification.objects.all()
+    bulletin_content = Bulletin.objects.all().order_by('-time')
+    clarification_content = Clarification.objects.all().order_by('-time')
 
 
     return render(request, "base.html", {'bulletin': bulletin_content, 'clarification': clarification_content})

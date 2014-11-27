@@ -80,24 +80,34 @@
     </div>
     <!-- clarification popup -->
     <div id="clarification-popup" class="mfp-hide">
+        <script type="text/javascript">
+        $(function() {
+            $('#questionText').keyup(function(){
+                $('#clarSubmit').prop("disabled", !($(this).val() != ''));
+            })
+        })
+        </script>
         <div class="jumbotron">
             <h2>Send Clarification</h2>
             <form class="form-horizontal" action="" method="post">{% csrf_token %}
-                <div class="form-group row">
-                    <label class="control-label col-md-2">Your Name</label>
-                    <div class='col-md-10'>
-                        <input class="form-control" type="text" id="inputSmall" name='asker' placeholder="Anonymous">
+                <div class="form-group">
+                    <div class='row'>
+                        <label class="control-label col-md-2">Your Name</label>
+                        <div class='col-md-10'>
+                            <input class="form-control" type="text" id="inputSmall" name='asker' placeholder="Anonymous">
+                        </div>
                     </div>
-
-                    <label for="textArea" class="col-lg-2 control-label">Question</label>
-                    <div class="col-lg-10">
-                        <textarea class="form-control" rows="3" id="textArea" name='question' placeholder="Why is hydai so handsome?"></textarea>
-                        <span class="help-block">The more specific, the better.</span>
+                    <div class='row'>
+                        <label class="col-md-2 control-label">Question</label>
+                        <div class="col-md-10">
+                            <textarea class="form-control" rows="3" id="questionText" name='question' placeholder="Why is hydai so handsome?"></textarea>
+                            <span class="help-block">The more specific, the better.</span>
+                        </div>
                     </div>
                 </div>
                 <div class="modal-footer">
                     <div style="display:inline;float:right;">
-                        <button type="submit" class="btn btn-primary" style="text-align:right;">Submit</button>
+                        <button type="submit" id='clarSubmit' disabled class="btn btn-primary" style="text-align:right;">Submit</button>
                     </div>
                 </div>
             </form>
@@ -195,16 +205,16 @@
         <!-- clarification -->
         {%include "clarification.html"%}
 
-    <footer class='bs-docs-footer-links muted container-fluid'>
-        <div class='row'>
-            <div class='col-lg-4'>
-                <p>© ISeaTeL Cup 2014</p>
+        <footer class='bs-docs-footer-links muted container-fluid'>
+            <div class='row'>
+                <div class='col-lg-4'>
+                    <p>© ISeaTeL Cup 2014</p>
+                </div>
+                <div class='col-lg-2 col-lg-offset-6'>
+                    <p id='time'></p>
+                </div>
             </div>
-            <div class='col-lg-2 col-lg-offset-6'>
-                <p id='time'></p>
-            </div>
-        </div>
-    </footer>
+        </footer>
 
 
 

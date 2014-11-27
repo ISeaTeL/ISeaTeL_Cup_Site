@@ -8,7 +8,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
     <!-- bootstrap CSS & JS -->
-    <link rel="stylesheet" href="http://bootswatch.com/flatly/bootstrap.css" media="screen">
+    <link rel="stylesheet" href="http://bootswatch.com/paper/bootstrap.css" media="screen">
     <link rel="stylesheet" href="http://bootswatch.com/assets/css/bootswatch.min.css">
     <!--link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css" rel="stylesheet">
     <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script-->
@@ -32,12 +32,16 @@
 
     <style type="text/css">
     /* TODO */
-        .form-group{
-            margin: 1% !important;
-        }
-        .container-fluid{
-            margin-top:5%;
-        }
+    
+    .form-group {
+        margin: 2% !important;
+    }
+    h2 {
+        margin: 2% !important;
+    }
+    .container-fluid {
+        margin-top: 5%;
+    }
     </style>
 
     <script>
@@ -74,9 +78,33 @@
             </form>
         </div>
     </div>
+    <!-- clarification popup -->
+    <div id="clarification-popup" class="mfp-hide">
+        <div class="jumbotron">
+            <h2>Send Clarification</h2>
+            <form class="form-horizontal" action="" method="post">{% csrf_token %}
+                <div class="form-group row">
+                    <label class="control-label col-md-2">Your Name</label>
+                    <div class='col-md-10'>
+                        <input class="form-control" type="text" id="inputSmall" name='asker' placeholder="Anonymous">
+                    </div>
 
+                    <label for="textArea" class="col-lg-2 control-label">Question</label>
+                    <div class="col-lg-10">
+                        <textarea class="form-control" rows="3" id="textArea" name='question' placeholder="Why is hydai so handsome?"></textarea>
+                        <span class="help-block">The more specific, the better.</span>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <div style="display:inline;float:right;">
+                        <button type="submit" class="btn btn-primary" style="text-align:right;">Submit</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
     <!-- navbar container-->
-    <div class="navbar navbar-fixed-top navbar-default" id='navbar'>
+    <div class="navbar navbar-fixed-top navbar-inverse" id='navbar'>
 
         <div class="navbar-header">
             <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-inverse-collapse">
@@ -92,40 +120,6 @@
         <div class="navbar-collapse collapse navbar-inverse-collapse">
 
             <ul class="nav navbar-nav">
-                <!-- personal-->
-                <li class="dropdown">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">Personal <b class="caret"></b></a>
-                    <ul class="dropdown-menu">
-                        <li><a href="/status">Submission</a>
-                        </li>
-                        <li><a href="/profile">Statistics &amp Proflie</a>
-                        </li>
-                        <li><a href="/team">Team</a>
-                        </li>
-                    </ul>
-                </li>
-                <!-- can do-->
-                <li class="dropdown">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">Can Do <b class="caret"></b></a>
-                    <ul class="dropdown-menu">
-                        <li><a href="/submit">Submit</a>
-                        </li>
-                        <li><a href="/status">Status</a>
-                        </li>
-                        <li><a href="/rank">User Rank</a>
-                        </li>
-                    </ul>
-                </li>
-                <!-- contest-->
-                <li class="dropdown">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">Contest <b class="caret"></b></a>
-                    <ul class="dropdown-menu">
-                        <li><a href="#">Archive</a>
-                        </li>
-                        <li><a href="#">Scoreboard</a>
-                        </li>
-                    </ul>
-                </li>
                 <!-- volume -->
                 <li class="dropdown">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown">Volume <b class="caret"></b></a>
@@ -154,10 +148,6 @@
                 </li>
             </ul>
 
-            <form class="navbar-form navbar-left">
-                <input type="text" class="form-control col-lg-8" placeholder="Search NTHU OJ">
-            </form>
-
             <ul class="nav navbar-nav navbar-right">
                 <li>
                     <a href="#login-popup" class="open-popup-link"><b>Login</b></a>
@@ -171,8 +161,40 @@
         </div>
     </div>
     <div class='container-fluid'>
-        {% block body_block %} {% endblock body_block %}
-    </div>
+        <div class="jumbotron">
+            <h1>ISeaTeL Cup</h1>
+            <p>This is a simple and fun contest for beginners.</p>
+            <p><a class="btn btn-primary btn-lg">Learn more</a>
+            </p>
+        </div>
+        <!-- bulletin board -->
+        <div class="panel panel-primary">
+            <div class="panel-heading">
+                <h3 class="panel-title">Bulletin Board</h3>
+            </div>
+            <table class="table table-striped table-hover table-bordered">
+                <thead>
+                    <tr>
+                        <th class='col-md-2'>Title</th>
+                        <th class='col-md-8'>Content</th>
+                        <th class='col-md-2'>Time</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for article in bulletin %}
+                    <tr>
+                        <td>{{ article.title }}</td>
+                        <td>{{ article.content|linebreaks }}</td>
+                        <td>{{ article.time }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+        <!-- clarification -->
+        {%include "clarification.html"%}
+
     <footer class='bs-docs-footer-links muted container-fluid'>
         <div class='row'>
             <div class='col-lg-4'>

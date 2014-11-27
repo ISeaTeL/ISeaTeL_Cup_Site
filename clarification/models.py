@@ -13,7 +13,7 @@ class Bulletin(models.Model):
 class Clarification(models.Model):
     asker = models.TextField(default='Anonymous')
     question = models.TextField()
-    reply = models.TextField(default='Not yet reply.')
+    reply = models.TextField(default='No reply yet.')
     time = models.DateTimeField(default=datetime.now(), auto_now=True)
     def __unicode__(self):
         return 'question: ' + self.question + ' | reply: ' + self.reply + ' @' + str(self.time.date())

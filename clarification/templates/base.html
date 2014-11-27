@@ -27,9 +27,6 @@
     <link rel="stylesheet" href="http://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.6.2/css/bootstrap-select.min.css" />
     <script src="http://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.6.2/js/bootstrap-select.min.js"></script>
 
-
-    {% block import_source %} {% endblock import_source %}
-
     <style type="text/css">
     /* TODO */
     
@@ -82,7 +79,7 @@
     <div id="clarification-popup" class="mfp-hide">
         <script type="text/javascript">
         $(function() {
-            $('#questionText').keyup(function(){
+            $('#questionText').keyup(function() {
                 $('#clarSubmit').prop("disabled", !($(this).val() != ''));
             })
         })
@@ -132,27 +129,9 @@
             <ul class="nav navbar-nav">
                 <!-- volume -->
                 <li class="dropdown">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">Volume <b class="caret"></b></a>
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">Contests <b class="caret"></b></a>
                     <ul class="dropdown-menu">
-                        <li><a href="#">Volume 1</a>
-                        </li>
-                        <li><a href="#">Volume 2</a>
-                        </li>
-                        <li><a href="#">Volume 3</a>
-                        </li>
-                        <li><a href="#">Volume 4</a>
-                        </li>
-                        <li><a href="#">Volume 5</a>
-                        </li>
-                        <li><a href="#">Volume 6</a>
-                        </li>
-                        <li><a href="#">Volume 7</a>
-                        </li>
-                        <li><a href="#">Volume 8</a>
-                        </li>
-                        <li class="divider"></li>
-                        <li class="dropdown-header">CPE Problems</li>
-                        <li><a href="#">Volume 9</a>
+                        <li><a href="#">contest 1 (11/29)</a>
                         </li>
                     </ul>
                 </li>

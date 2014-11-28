@@ -81,7 +81,7 @@
         <script type="text/javascript">
         $(function() {
             $('#questionText').keyup(function() {
-                $('#clarSubmit').prop("disabled", !($(this).val().replace(' ', '') != ''));
+                $('#clarSubmit').prop("disabled", !($(this).val().replace(/ /g,'') != ''));
             })
         })
         </script>
@@ -168,7 +168,7 @@
                     {% for article in bulletin %}
                     <tr>
                         <td>{{ article.title }}</td>
-                        <td>{{ article.content|linebreaks }}</td>
+                        <td>{{ article.content|safe|linebreaks }}</td>
                         <td>{{ article.time }}</td>
                     </tr>
                     {% endfor %}

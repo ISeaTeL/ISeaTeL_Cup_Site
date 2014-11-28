@@ -81,13 +81,14 @@
         <script type="text/javascript">
         $(function() {
             $('#questionText').keyup(function() {
-                $('#clarSubmit').prop("disabled", !($(this).val() != ''));
+                $('#clarSubmit').prop("disabled", !($(this).val().replace(' ', '') != ''));
             })
         })
         </script>
         <div class="jumbotron">
             <h2>Send Clarification</h2>
             <form class="form-horizontal" action="" method="post">{% csrf_token %}
+                <input type='hidden' name='token' value={{token}}>
                 <div class="form-group">
                     <div class='row'>
                         <label class="control-label col-md-2">Name</label>
@@ -184,7 +185,7 @@
                     <p>© ISeaTeL Cup 2014</p>
                 </div>
                 <div class='col-lg-2 col-lg-offset-6'>
-                    <p id='time'></p>
+                    <p>Visited: {{hits}}</p>
                 </div>
             </div>
         </footer>

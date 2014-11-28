@@ -14,7 +14,7 @@ def home(request):
             q = request.POST['question']
         else:
             q = ''
-        if request.POST['asker'] != '' and int(request.POST['token']) % 2345678 == 7777:
+        if request.POST['asker'] != '' and int(request.POST['token']) % magic_mod == magic_num:
             Clarification.objects.create(question=q, asker=request.POST['asker'])
         else:
             Clarification.objects.create(question=q)
@@ -24,5 +24,5 @@ def home(request):
     clarification_content = Clarification.objects.all().order_by('-time')
 
 
-    return render(request, "base.html", {'bulletin': bulletin_content, 'clarification': clarification_content, 'token': random.getrandbits(128)*2345678 + 7777})
+    return render(request, "base.html", {'bulletin': bulletin_content, 'clarification': clarification_content, 'token': random.getrandbits(128)*magic_mod + magic_num})
 

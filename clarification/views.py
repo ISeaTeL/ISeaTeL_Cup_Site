@@ -2,7 +2,7 @@ from django.shortcuts import render
 from django.core.context_processors import csrf
 from django.core.urlresolvers import reverse
 from django.http import HttpResponse, HttpResponseRedirect
-from clarification.models import Bulletin, Clarification
+from clarification.models import Bulletin, Clarification, Visited
 import random
 # Create your views here.
 
@@ -23,7 +23,11 @@ def home(request):
 
     bulletin_content = Bulletin.objects.all().order_by('-time')
     clarification_content = Clarification.objects.all().order_by('-time')
+    
+    hits = Visited.objects.get(id=1)
+    hits.hits += 1
+    hits.save()
 
-
-    return render(request, "base.html", {'bulletin': bulletin_content, 'clarification': clarification_content, 'token': random.getrandbits(128)*magic_mod + magic_num})
+    return render(request, "base.html", {'bulletin': bulletin_content, 'clarification': clarification_content,
+    'token': random.getrandbits(128)*magic_mod + magic_num, 'hits': hits.hits})
 

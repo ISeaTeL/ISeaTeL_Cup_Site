@@ -9,11 +9,12 @@ import random
 def home(request):
     magic_num = 7777
     magic_mod = 2345678
+
     if request.method == 'POST':
-        if 'question' in request.POST:
-            q = request.POST['question']
-        else:
-            q = ''
+        if not all(x in request.POST for x in ['token', 'asker', 'question']):
+            return HttpResponseRedirect(reverse("clarification.views.home"))
+        
+        q = request.POST['question']
         if request.POST['asker'] != '' and int(request.POST['token']) % magic_mod == magic_num:
             Clarification.objects.create(question=q, asker=request.POST['asker'])
         else:

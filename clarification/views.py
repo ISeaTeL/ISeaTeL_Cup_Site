@@ -24,7 +24,11 @@ def home(request):
     bulletin_content = Bulletin.objects.all().order_by('-time')
     clarification_content = Clarification.objects.all().order_by('-time')
     
-    hits = Visited.objects.get(id=1)
+    if Visited.objects.count() == 0:
+        v = Visited.objects.create(hits=0)
+        v.save()
+
+    hits = Visited.objects.first()
     hits.hits += 1
     hits.save()
 

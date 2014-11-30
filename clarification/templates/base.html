@@ -1,5 +1,4 @@
-<!DOCTYPE html>
-{% load static %}
+<!DOCTYPE html> {% load static %}
 
 <html>
 
@@ -7,7 +6,7 @@
     <title>ISeaTeL Cup</title>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="shortcut icon" href="{{ STATIC_URL }}media/favicon.ico"/>
+    <link rel="shortcut icon" href="{{ STATIC_URL }}media/favicon.ico" />
 
     <!-- necessarily jQeuery -->
     <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
@@ -20,7 +19,7 @@
     <!-- Magnific Popup core JS & CSS -->
     <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/magnific-popup.js/0.9.9/magnific-popup.css">
     <script src="//cdnjs.cloudflare.com/ajax/libs/magnific-popup.js/0.9.9/jquery.magnific-popup.min.js"></script>
-    
+
     <link rel="stylesheet" href={% static "css/mfp-fade.css"%}>
     <script src={% static "js/popup-setting.js"%}></script>
 
@@ -75,43 +74,6 @@
         </div>
     </div>
 
-    <!-- clarification popup -->
-    <div id="clarification-popup" class="mfp-hide">
-        <script type="text/javascript">
-        $(function() {
-            $('#questionText').keyup(function() {
-                $('#clarSubmit').prop("disabled", !($(this).val().replace(/ /g,'') != ''));
-            })
-        })
-        </script>
-        <div class="jumbotron">
-            <h2>Send Clarification</h2>
-            <form class="form-horizontal" action="" method="post">{% csrf_token %}
-                <input type='hidden' name='token' value={{token}}>
-                <div class="form-group">
-                    <div class='row'>
-                        <label class="control-label col-md-2">Name</label>
-                        <div class='col-md-10'>
-                            <input class="form-control" type="text" name='asker' placeholder="Anonymous">
-                        </div>
-                    </div>
-                    <div class='row'>
-                        <label class="col-md-2 control-label">Question</label>
-                        <div class="col-md-10">
-                            <textarea class="form-control" rows="3" id="questionText" name='question' placeholder="Your question! Meow~~"></textarea>
-                            <span class="help-block">The more specific, the better.</span>
-                        </div>
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <div style="display:inline;float:right;">
-                        <button type="submit" id='clarSubmit' disabled class="btn btn-primary" style="text-align:right;">Submit</button>
-                    </div>
-                </div>
-            </form>
-        </div>
-    </div>
-
     <!-- navbar container-->
     <div class="navbar navbar-fixed-top navbar-default" id='navbar'>
         <div class="navbar-header">
@@ -134,21 +96,21 @@
             </ul>
 
             <ul class="nav navbar-nav navbar-right">
-				<!--
+                <!--
                 <li style='margin-right:10px'>
                     <a href="#login-popup" class="open-popup-link"><b>Login</b></a>
                 </li>
-				-->
+                -->
             </ul>
-
-
         </div>
     </div>
     <div class='container-fluid'>
+        {%block body_block%}
         <div class="jumbotron">
             <h1>ISeaTeL Cup</h1>
             <p>This is a simple and fun contest for beginners.</p>
-            <p><a class="btn btn-primary btn-lg" href="http://acm.cs.nthu.edu.tw/contest.php?cid=654">比賽連結</a></p>
+            <p><a class="btn btn-primary btn-lg" href="http://acm.cs.nthu.edu.tw/contest.php?cid=654">比賽連結</a>
+            </p>
             <!--<p><a class="btn btn-primary btn-lg">Learn more</a></p>-->
         </div>
         <!-- bulletin board -->
@@ -175,20 +137,20 @@
                 </tbody>
             </table>
         </div>
+        {% include 'clarification.html' %}
+        {%endblock body_block%}
+    </div>
 
-        <!-- clarification -->
-        {%include "clarification.html"%}
-
-        <footer class='bs-docs-footer-links muted container-fluid'>
-            <div class='row'>
-                <div class='col-lg-4'>
-                    <p>© ISeaTeL Cup 2014</p>
-                </div>
-                <div class='col-lg-2 col-lg-offset-6'>
-                    <p>Visited: {{hits}}</p>
-                </div>
+    <footer class='bs-docs-footer-links muted container-fluid'>
+        <div class='row'>
+            <div class='col-lg-4'>
+                <p>© ISeaTeL Cup 2014</p>
             </div>
-        </footer>
+            <div class='col-lg-2 col-lg-offset-6'>
+                <p>Visited: {{hits}}</p>
+            </div>
+        </div>
+    </footer>
 
 
 

@@ -1,4 +1,40 @@
-<!-- clarification -->
+<!-- clarification popup -->
+<div id="clarification-popup" class="mfp-hide">
+    <script type="text/javascript">
+    $(function() {
+        $('#questionText').keyup(function() {
+            $('#clarSubmit').prop("disabled", !($(this).val().replace(/ /g, '') != ''));
+        })
+    })
+    </script>
+    <div class="jumbotron">
+        <h2>Send Clarification</h2>
+        <form class="form-horizontal" action="" method="post">{% csrf_token %}
+            <input type='hidden' name='token' value={{token}}>
+            <div class="form-group">
+                <div class='row'>
+                    <label class="control-label col-md-2">Name</label>
+                    <div class='col-md-10'>
+                        <input class="form-control" type="text" name='asker' placeholder="Anonymous">
+                    </div>
+                </div>
+                <div class='row'>
+                    <label class="col-md-2 control-label">Question</label>
+                    <div class="col-md-10">
+                        <textarea class="form-control" rows="3" id="questionText" name='question' placeholder="Your question! Meow~~"></textarea>
+                        <span class="help-block">The more specific, the better.</span>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <div style="display:inline;float:right;">
+                    <button type="submit" id='clarSubmit' disabled class="btn btn-primary" style="text-align:right;">Submit</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
 <div class="panel panel-primary">
     <div class="panel-heading">
         <div class='row'>
@@ -30,5 +66,4 @@
             {% endfor %}
         </tbody>
     </table>
-</div>
 </div>

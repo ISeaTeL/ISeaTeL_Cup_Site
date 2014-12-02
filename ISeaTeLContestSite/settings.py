@@ -22,7 +22,7 @@ STATIC_URL = '/static/'
 SECRET_KEY = 'p%$%@0x3f*mt^crlor_2r3vujh2&!4%e^cc3wbw+6=dqm&pt3x'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 TEMPLATE_DEBUG = True
 
@@ -38,8 +38,8 @@ INSTALLED_APPS = (
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'clarification',
-    'scoreboard',
+    'index',
+    'contest',
 )
 
 MIDDLEWARE_CLASSES = (

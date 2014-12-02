@@ -1,0 +1,69 @@
+<!-- clarification popup -->
+<div id="clarification-popup" class="mfp-hide">
+    <script type="text/javascript">
+    $(function() {
+        $('#questionText').keyup(function() {
+            $('#clarSubmit').prop("disabled", !($(this).val().replace(/ /g, '') != ''));
+        })
+    })
+    </script>
+    <div class="jumbotron">
+        <h2>Send Clarification</h2>
+        <form class="form-horizontal" action="" method="post">{% csrf_token %}
+            <input type='hidden' name='token' value={{token}}>
+            <div class="form-group">
+                <div class='row'>
+                    <label class="control-label col-md-2">Name</label>
+                    <div class='col-md-10'>
+                        <input class="form-control" type="text" name='asker' placeholder="Anonymous">
+                    </div>
+                </div>
+                <div class='row'>
+                    <label class="col-md-2 control-label">Question</label>
+                    <div class="col-md-10">
+                        <textarea class="form-control" rows="3" id="questionText" name='question' placeholder="Your question! Meow~~"></textarea>
+                        <span class="help-block">The more specific, the better.</span>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <div style="display:inline;float:right;">
+                    <button type="submit" id='clarSubmit' disabled class="btn btn-primary" style="text-align:right;">Submit</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+<div class="panel panel-primary">
+    <div class="panel-heading">
+        <div class='row'>
+            <div class='col-md-4'>
+                <h3 class="panel-title">Clarification</h3>
+            </div>
+            <div class="col-md-offset-7 col-md-1">
+                <a href="#clarification-popup" class="open-popup-link  btn btn-danger" style="float:right">Send Clarification</a>
+            </div>
+        </div>
+    </div>
+    <table class="table table-striped table-hover table-bordered">
+        <thead>
+            <tr>
+                <th class='col-md-2'>Asker</th>
+                <th class='col-md-4'>Question</th>
+                <th class='col-md-4'>Reply</th>
+                <th class='col-md-2'>Time</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for clar in clarification_table %}
+            <tr>
+                <td>{{ clar.asker }}</td>
+                <td>{{ clar.question|linebreaks }}</td>
+                <td>{{ clar.reply|linebreaks }}</td>
+                <td>{{ clar.time }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>

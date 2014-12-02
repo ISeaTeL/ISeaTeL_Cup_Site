@@ -9,4 +9,5 @@ urlpatterns = patterns('',
     url(r'^admin/', include(admin.site.urls)),
     url(r'^$', 'clarification.views.home'),
     url(r'^scoreboard$', 'scoreboard.views.scoreboard'),
+    url(r'^contest$', 'contest.views.contest'),
 )

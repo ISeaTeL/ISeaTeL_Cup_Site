@@ -2,6 +2,7 @@
 usage:
 type "python manage.py shell"
 paste the code in shell
+or type "execfile('initdb.py')" in shell
 '''
 from contest.models import *
 contest1 = Contest.objects.filter(cid=1)

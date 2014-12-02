@@ -1,3 +1,8 @@
+'''
+usage:
+type "python manage.py shell"
+paste the code in shell
+'''
 from contest.models import *
 contest1 = Contest.objects.filter(cid=1)
 

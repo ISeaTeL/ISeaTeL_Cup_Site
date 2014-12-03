@@ -28,7 +28,7 @@ if not contest1:
 我們在比賽間的公告以及回應的部分也都會在這裡噢！！！''',
     	status='<a class="btn btn-primary btn-lg" href="http://140.114.86.238/contest.php?cid=654">Ended</a>',
         problem_url='http://140.114.86.238/contest.php?cid=654', 
-        solution_url='http://hungyingdai.gitbooks.io/iseatel/content/1129/'
+        solution_url='http://hungyingdai.gitbooks.io/iseatel/content/1129/',
         scoreboard_url='http://140.114.86.238/scoreboard.php?cid=654',
         date='11/29')
 

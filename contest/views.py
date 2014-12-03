@@ -10,6 +10,9 @@ import re
 from bs4 import BeautifulSoup
 
 # Create your views here.
+def get_solution(url):
+    return '<iframe id="solution_frame" src="'+url+'pa.html" width="100%" height="200%">'
+
 def fetch_table(url):
     response = urllib2.urlopen(url)
     html = response.read()
@@ -50,6 +53,7 @@ def contest(request, contest_id):
 
         render_data["clarification_table"] = Clarification.objects.filter(cid=contest_id).order_by('-time')
         render_data["scoreboard_table"] = get_scoreboard(contest_data.scoreboard_url)
+        render_data["solution_table"] = get_solution(contest_data.solution_url)
         render_data["problem_table"] = get_problem(contest_data.problem_url)
         render_data["token"] = random.getrandbits(128)*magic_mod + magic_num
         render_data["head_title"] = contest_data.title

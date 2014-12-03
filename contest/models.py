@@ -14,6 +14,7 @@ class Clarification(models.Model):
 class Contest(models.Model):
     cid = models.IntegerField()
     problem_url = models.TextField()
+    solution_url = models.TextField()
     scoreboard_url = models.TextField()
     date = models.TextField()
     title = models.TextField()

@@ -52,6 +52,9 @@ def contest(request, contest_id):
         render_data["scoreboard_table"] = get_scoreboard(contest_data.scoreboard_url)
         render_data["problem_table"] = get_problem(contest_data.problem_url)
         render_data["token"] = random.getrandbits(128)*magic_mod + magic_num
+        render_data["head_title"] = contest_data.title
+        render_data["head_content"] = contest_data.content
+        render_data["head_status"] = contest_data.status
 
         return render(request, "contest.html", render_data)
     else:

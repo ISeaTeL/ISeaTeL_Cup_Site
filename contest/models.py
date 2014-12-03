@@ -13,9 +13,12 @@ class Clarification(models.Model):
 
 class Contest(models.Model):
     cid = models.IntegerField()
-    scoreboard_url = models.TextField()
     problem_url = models.TextField()
+    scoreboard_url = models.TextField()
     date = models.TextField()
+    title = models.TextField()
+    content = models.TextField()
+    status = models.TextField()
     def __unicode__(self):
         return 'cid: ' + str(self.cid) + '| date: ' + self.date
 

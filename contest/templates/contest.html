@@ -1,6 +1,25 @@
 {%extends "base.html"%}
 {%block body_block%}
-	{%include 'problem.html'%}
-	{%include 'clarification.html'%}
-	{%include 'scoreboard.html'%}
+<div class="tabbable">
+  <ul class="nav nav-tabs">
+    <li class="active"><a href="#pane1" data-toggle="tab">Bulletin</a></li>
+    <li><a href="#pane2" data-toggle="tab">Problems</a></li>
+    <li><a href="#pane3" data-toggle="tab">Scoreboard</a></li>
+    <li><a href="#pane4" data-toggle="tab">Clarification</a></li>
+  </ul>
+  <div class="tab-content">
+    <div id="pane1" class="tab-pane active">
+      {%include 'head.html'%}
+    </div>
+    <div id="pane2" class="tab-pane">
+      {%include 'problem.html'%}
+    </div>
+    <div id="pane3" class="tab-pane">
+      {%include 'scoreboard.html'%}
+    </div>
+    <div id="pane4" class="tab-pane">
+      {%include 'clarification.html'%}
+    </div>
+  </div><!-- /.tab-content -->
+</div><!-- /.tabbable -->
 {%endblock body_block%}

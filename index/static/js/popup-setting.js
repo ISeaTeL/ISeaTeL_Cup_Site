@@ -9,9 +9,6 @@ $(function() {
     });
     $('.href-popup-link').magnificPopup({
         type: 'iframe',
-        removalDelay: 500,
-        mainClass: 'mmfp-fade',
-        midClick: true,
-        fixedContentPos: true
+        midClick: true
     });
 })

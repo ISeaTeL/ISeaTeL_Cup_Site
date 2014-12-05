@@ -1,7 +1,7 @@
 {%extends "base.html"%}
 {%block body_block%}
 <div class="tabbable">
-  <ul class="nav nav-tabs">
+    <ul class="nav nav-tabs">
     <li class="active"><a href="#pane1" data-toggle="tab">Bulletin</a></li>
     <li><a href="#pane2" data-toggle="tab">Problems</a></li>
     <li><a href="#pane3" data-toggle="tab">Scoreboard</a></li>
@@ -28,8 +28,7 @@
                     document.documentElement.clientHeight*0.7);
             });
         </script>
-
-        {{ solution_table|safe }}
+        {{solution_table|safe}}
     </div>
   </div><!-- /.tab-content -->
 </div><!-- /.tabbable -->

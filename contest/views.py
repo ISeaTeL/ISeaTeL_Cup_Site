@@ -31,8 +31,11 @@ def get_scoreboard(url):
 
 def get_problem(url):
     rawData = str(fetch_table(url))
-    rawData = rawData.replace('problem', 'http://140.114.86.238/problem')
-    return rawData
+    soup = BeautifulSoup(rawData)
+    for a in soup.find_all('a'):
+        a['href'] = 'http://140.114.86.238/' + a['href']
+        a['class'] = 'href-popup-link'
+    return str(soup)
 
 
 def contest(request, contest_id):

@@ -12,14 +12,20 @@ class Clarification(models.Model):
         return 'question: ' + self.question + ' | reply: ' + self.reply + ' @' + str(self.time.date())
 
 class Contest(models.Model):
-    cid = models.IntegerField()
+    cid = models.IntegerField(unique=True)
     problem_url = models.TextField()
     solution_url = models.TextField()
     scoreboard_url = models.TextField()
+    signup_url = models.TextField()
     date = models.TextField()
     title = models.TextField()
     content = models.TextField()
-    status = models.TextField()
+    STATUS = (
+        ('incoming', 'incoming'),
+        ('running', 'running'),
+        ('ended', 'ended'),
+    )
+    status = models.TextField(choices=STATUS)
     def __unicode__(self):
         return 'cid: ' + str(self.cid) + '| date: ' + self.date
 

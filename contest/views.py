@@ -66,8 +66,8 @@ def sign_up_reply(contest_data, request):
     reply_title = 'You have succeeded signing up ISeaTeL Cup on ' + contest_data.date 
     reply_content = str(render(request, "reply_signup.html", render_data)).replace('Content-Type: text/html; charset=utf-8', '')
     
-    from_email, to = 'iseatel.reply@gmail.com', request.POST['email']
-    msg = EmailMultiAlternatives(reply_title, reply_content, from_email, [to])
+    from_email, to_email = 'iseatel.reply@gmail.com', request.POST['email']
+    msg = EmailMultiAlternatives(reply_title, reply_content, from_email, [to_email])
     msg.attach_alternative(reply_content, "text/html")
     msg.send()
     
@@ -88,8 +88,11 @@ def contest(request, contest_id):
     if contest_data:
         if request.method == 'POST':
             if all(x in request.POST for x in ['signup', 'nthu_oj_id', 'name', 'email', 'message']):
-                sign_up_reply(contest_data, request)
-                SignUp.objects.create(nthu_oj_id=request.POST['nthu_oj_id'], name=request.POST['name'], email=request.POST['email'], message=request.POST['message'], cid=contest_id)
+                try:
+                    SignUp.objects.create(nthu_oj_id=request.POST['nthu_oj_id'], name=request.POST['name'], email=request.POST['email'], message=request.POST['message'], cid=contest_id)
+                    sign_up_reply(contest_data, request)
+                except:
+                    return HttpResponse('<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><style type="text/css"></style></head><body><h1>QAQ</h1><p>Please provide valid data.<br><a href="/contest/' + str(contest_id) + '">Go back</a></p></body></html>')
             if all(x in request.POST for x in ['token', 'asker', 'question']):
                 if request.POST['asker'] != '' and int(request.POST['token']) % magic_mod == magic_num:
                     Clarification.objects.create(question=request.POST['question'], asker=request.POST['asker'], cid=contest_id)

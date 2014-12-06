@@ -55,9 +55,24 @@ def get_problem(contest_data):
                 tr.append(BeautifulSoup('<th>Solution</th>'))
     return str(soup)
 
-def sign_up_reply(contest_data, request):
-    send_mail(reply_title,  reply_content, 'iseatel.reply@gmail.com', [request.POST['email']])
+from django.core.mail import EmailMultiAlternatives
 
+def sign_up_reply(contest_data, request):
+    render_data = {}
+    render_data["register_name"] = request.POST['nthu_oj_id']
+    render_data["contest_name"] = contest_data.title
+    render_data["contest_cid"] = contest_data.cid
+    
+    reply_title = 'You have succeeded signing up ISeaTeL Cup on ' + contest_data.date 
+    reply_content = str(render(request, "reply_signup.html", render_data)).replace('Content-Type: text/html; charset=utf-8', '')
+    
+    subject, from_email, to = 'hello', 'iseatel.reply@gmail.com', request.POST['email']
+    text_content = 'This is an important message.'
+    html_content = '<p>This is an <strong>important</strong> message.</p>'
+    msg = EmailMultiAlternatives(reply_title, reply_content, from_email, [to])
+    msg.attach_alternative(reply_content, "text/html")
+    msg.send()
+    
 def get_status(contest_data):
     status = contest_data.status
     if status=='ended' or status=='running':

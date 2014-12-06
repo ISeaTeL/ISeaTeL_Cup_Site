@@ -32,6 +32,26 @@ if not contest1:
         scoreboard_url='http://140.114.86.238/scoreboard.php?cid=654',
         signup_url='https://docs.google.com/forms/d/1jrn696jJufQQjhOGv3CTD4GTZIP5ENV-CNh8dm4WeAA/viewform?c=0&w=1',
         date='11/29')
+    Contest.objects.create(cid=2,
+    	title='ISeaTeL 盃 - 歡樂線上賽] 11/29 選舉當天的愚人節大賽',
+    	content='''線上賽從晚上七點整開始，為期三小時，內容有十題
+因為很輕鬆，所以可以邊看開票邊寫也沒關係ＸＤ
+比賽方式只要連上 <a href="http://acm.cs.nthu.edu.tw/index.php">OJ</a>
+點進去 “ISeaTeL 盃 - 歡樂線上賽” 即可
+不用到系計中，所以我們也沒有提供食物（請期待之後的實體賽）
+
+友善提醒：
+在網頁上頭出現的所有文字都要記得留意喔
+
+因為目前我們的 OJ 的發問功能有點問題
+對題目等疑問請在這個網站上發問
+我們在比賽間的公告以及回應的部分也都會在這裡噢！！！''',
+    	status='incoming',
+        problem_url='http://140.114.86.238/contest.php?cid=654', 
+        solution_url='http://hungyingdai.gitbooks.io/iseatel/content/1129/',
+        scoreboard_url='http://140.114.86.238/scoreboard.php?cid=654',
+        signup_url='https://docs.google.com/forms/d/1jrn696jJufQQjhOGv3CTD4GTZIP5ENV-CNh8dm4WeAA/viewform?c=0&w=1',
+        date='11/29')
 
 #bulletin board init
 Bulletin.objects.create(

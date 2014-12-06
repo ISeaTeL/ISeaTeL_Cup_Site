@@ -24,10 +24,28 @@ SECRET_KEY = 'p%$%@0x3f*mt^crlor_2r3vujh2&!4%e^cc3wbw+6=dqm&pt3x'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
-TEMPLATE_DEBUG = True
+TEMPLATE_DEBUG = False
 
 ALLOWED_HOSTS = ['*',]
 
+# Sending email setting
+from password import GMAIL_PASSWORD 
+#GMAIL_PASSWORD = ''
+#with open('iseatel.password','r') as f:
+#    GMAIL_PASSWORD = f.read()
+
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_HOST_USER = 'iseatel.reply@gmail.com'
+EMAIL_HOST_PASSWORD = GMAIL_PASSWORD
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+DEFAULT_FROM_EMAIL = 'iseatel.reply@gmail.com'
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+
+
+# Sending emails when error occurs
+ADMINS = (('henryyang', 'henryyang42@gmail.com'), ('hydai', 'z54981220@gmail.com'))
+MANAGERS = ADMINS
 
 # Application definition
 
@@ -45,6 +63,7 @@ INSTALLED_APPS = (
 MIDDLEWARE_CLASSES = (
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
+    'django.middleware.common.BrokenLinkEmailsMiddleware',
     #'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.auth.middleware.SessionAuthenticationMiddleware',
@@ -85,12 +104,3 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/1.7/howto/static-files/
 
 STATIC_URL = '/static/'
-
-# Sending email setting
-EMAIL_HOST = 'smtp.gmail.com'
-EMAIL_HOST_USER = 'iseatel.reply@gmail.com'
-EMAIL_HOST_PASSWORD = ''
-EMAIL_PORT = 587
-EMAIL_USE_TLS = True
-DEFAULT_FROM_EMAIL = 'iseatel.reply@gmail.com'
-EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'

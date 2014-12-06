@@ -3,6 +3,7 @@ from contest.models import Clarification, Contest, SignUp
 from django.core.context_processors import csrf
 from django.core.urlresolvers import reverse
 from django.http import HttpResponse, HttpResponseRedirect
+from django.core.mail import send_mail
 
 import random
 import urllib2
@@ -54,6 +55,9 @@ def get_problem(contest_data):
                 tr.append(BeautifulSoup('<th>Solution</th>'))
     return str(soup)
 
+def sign_up_reply(contest_data, request):
+    send_mail(reply_title,  reply_content, 'iseatel.reply@gmail.com', [request.POST['email']])
+
 def get_status(contest_data):
     status = contest_data.status
     if status=='ended' or status=='running':
@@ -71,6 +75,7 @@ def contest(request, contest_id):
     if contest_data:
         if request.method == 'POST':
             if all(x in request.POST for x in ['signup', 'nthu_oj_id', 'name', 'email', 'message']):
+                sign_up_reply(contest_data, request)
                 SignUp.objects.create(nthu_oj_id=request.POST['nthu_oj_id'], name=request.POST['name'], email=request.POST['email'], message=request.POST['message'], cid=contest_id)
             if all(x in request.POST for x in ['token', 'asker', 'question']):
                 if request.POST['asker'] != '' and int(request.POST['token']) % magic_mod == magic_num:

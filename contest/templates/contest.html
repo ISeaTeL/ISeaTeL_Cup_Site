@@ -1,12 +1,11 @@
 {%extends "base.html"%}
 {%block body_block%}
 <div class="tabbable">
-  <ul class="nav nav-tabs">
-    <li class="active"><a href="#pane1" data-toggle="tab">Bulletin</a></li>
-    <li><a href="#pane2" data-toggle="tab">Problems</a></li>
-    <li><a href="#pane3" data-toggle="tab">Scoreboard</a></li>
-    <li><a href="#pane4" data-toggle="tab">Clarification</a></li>
-    <li><a href="#pane5" data-toggle="tab">Solution</a></li>
+    <ul class="nav nav-tabs">
+    <li class="active"><a id="p1" href="#pane1" data-toggle="tab">Bulletin</a></li>
+    <li><a id="p2" href="#pane2" data-toggle="tab">Problems</a></li>
+    <li><a id="p3" href="#pane3" data-toggle="tab">Scoreboard</a></li>
+    <li><a id="p4" href="#pane4" data-toggle="tab">Clarification</a></li>
   </ul>
   <div class="tab-content">
     <div id="pane1" class="tab-pane active">
@@ -20,16 +19,6 @@
     </div>
     <div id="pane4" class="tab-pane">
       {%include 'clarification.html'%}
-    </div>
-    <div id="pane5" class="tab-pane">
-        <script type='text/javascript'>
-            $(document).ready(function(){
-                $('#solution_frame').attr('height',
-                    document.documentElement.clientHeight*0.7);
-            });
-        </script>
-
-        {{ solution_table|safe }}
     </div>
   </div><!-- /.tab-content -->
 </div><!-- /.tabbable -->

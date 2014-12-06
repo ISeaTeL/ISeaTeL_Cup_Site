@@ -10,29 +10,56 @@ import re
 from bs4 import BeautifulSoup
 
 # Create your views here.
-def get_solution(url):
-    return '<iframe id="solution_frame" src="'+url+'pa.html" width="100%" height="200%">'
+INCOMING_HTML = '<h3>Incoming.</h3>'
 
 def fetch_table(url):
     response = urllib2.urlopen(url)
     html = response.read()
     soup = BeautifulSoup(html)
-    return soup.find_all('table')[1]
+    return str(soup.find_all('table')[1])
 
-def get_scoreboard(url):
-    rawData = str(fetch_table(url))
-    rawData = re.sub('<td>', '<td class="text-center">', rawData)
-    rawData = re.sub('<th>', '<th class="text-center">', rawData)
-    rawData = re.sub('0/[0-9]', '<div class="btn-danger text-center">0/1</div>', rawData)
-    rawData = re.sub('1/1', '<div class="btn-success text-center">1/1</div>', rawData)
-    rawData = re.sub('4/4', '<div class="btn-success text-center">4/4</div>', rawData)
-    return rawData
+def get_scoreboard(contest_data):
+    if(contest_data.status=='incoming'):
+        return INCOMING_HTML
 
+    url = contest_data.scoreboard_url
+    html = fetch_table(url)
+    html = re.sub('<td>', '<td class="text-center">', html)
+    html = re.sub('<th>', '<th class="text-center">', html)
+    html = re.sub('0/[0-9]', '<div class="btn-danger text-center">0/1</div>', html)
+    html = re.sub('1/1', '<div class="btn-success text-center">1/1</div>', html)
+    html = re.sub('4/4', '<div class="btn-success text-center">4/4</div>', html)
+    return html
 
-def get_problem(url):
-    rawData = str(fetch_table(url))
-    rawData = rawData.replace('problem', 'http://140.114.86.238/problem')
-    return rawData
+def get_solution_html(idx, base_url):
+    prob = 'p' + str(unichr(ord('a')+idx-1))
+    return '<td><a class="href-popup-link" href="' + base_url + prob +'.html">' + prob.upper() + '</a></td>'
+
+def get_problem(contest_data):
+    if(contest_data.status=='incoming'):
+        return INCOMING_HTML
+
+    url = contest_data.problem_url
+    html = fetch_table(url)
+    soup = BeautifulSoup(html)
+    for a in soup.find_all('a'):
+        a['href'] = 'http://140.114.86.238/' + a['href']
+        a['class'] = 'href-popup-link'
+    if contest_data.status=='ended' and 'http' in contest_data.solution_url:
+        trs = soup.find_all('tr')
+        for idx, tr in enumerate(trs):
+            if idx:
+                tr.append(BeautifulSoup(get_solution_html(idx, contest_data.solution_url)))
+            else:
+                tr.append(BeautifulSoup('<th>Solution</th>'))
+    return str(soup)
+
+def get_status(contest_data):
+    status = contest_data.status
+    if status=='ended' or status=='running':
+        return '<a class="btn btn-primary btn-lg" onclick="'+ "$('#p3').click()" + '" data-toggle="tab">'+status+'</a>'
+    else:
+        return '<a class="btn btn-primary btn-lg href-popup-link" title="You can sign up here." href="' + contest_data.signup_url + '">'+status+'</a>'
 
 
 def contest(request, contest_id):
@@ -52,14 +79,12 @@ def contest(request, contest_id):
             return HttpResponseRedirect(reverse("contest.views.contest", args=(contest_id,)))
 
         render_data["clarification_table"] = Clarification.objects.filter(cid=contest_id).order_by('-time')
-        render_data["scoreboard_table"] = get_scoreboard(contest_data.scoreboard_url)
-        render_data["solution_table"] = get_solution(contest_data.solution_url)
-        render_data["problem_table"] = get_problem(contest_data.problem_url)
+        render_data["scoreboard_table"] = get_scoreboard(contest_data)
+        render_data["problem_table"] = get_problem(contest_data)
         render_data["token"] = random.getrandbits(128)*magic_mod + magic_num
         render_data["head_title"] = contest_data.title
         render_data["head_content"] = contest_data.content
-        render_data["head_status"] = contest_data.status
-
+        render_data["head_status"] = get_status(contest_data)
         return render(request, "contest.html", render_data)
     else:
         return HttpResponse('<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><style type="text/css"></style></head><body><h1>Not Found</h1><p>The requested URL was not found on this server.</p></body></html>')

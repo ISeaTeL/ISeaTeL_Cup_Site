@@ -20,6 +20,7 @@ lib64/
 parts/
 sdist/
 var/
+static/
 *.egg-info/
 .installed.cfg
 *.egg
@@ -54,3 +55,5 @@ docs/_build/
 
 # PyBuilder
 target/
+# garbage
+.DS_Store

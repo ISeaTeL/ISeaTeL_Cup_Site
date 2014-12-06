@@ -66,9 +66,7 @@ def sign_up_reply(contest_data, request):
     reply_title = 'You have succeeded signing up ISeaTeL Cup on ' + contest_data.date 
     reply_content = str(render(request, "reply_signup.html", render_data)).replace('Content-Type: text/html; charset=utf-8', '')
     
-    subject, from_email, to = 'hello', 'iseatel.reply@gmail.com', request.POST['email']
-    text_content = 'This is an important message.'
-    html_content = '<p>This is an <strong>important</strong> message.</p>'
+    from_email, to = 'iseatel.reply@gmail.com', request.POST['email']
     msg = EmailMultiAlternatives(reply_title, reply_content, from_email, [to])
     msg.attach_alternative(reply_content, "text/html")
     msg.send()

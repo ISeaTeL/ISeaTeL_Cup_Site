@@ -23,3 +23,12 @@ class Contest(models.Model):
     def __unicode__(self):
         return 'cid: ' + str(self.cid) + '| date: ' + self.date
 
+class SignUp(models.Model):
+    nthu_oj_id = models.TextField()
+    name = models.TextField()
+    email = models.TextField()
+    message = models.TextField()
+    time = models.DateTimeField(default=datetime.now(), editable=True, auto_now_add=True)
+    def __unicode__(self):
+        return 'nthu_oj_id: ' + str(self.nthu_oj_id) + '| time: ' + str(self.time)
+

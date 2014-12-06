@@ -1,0 +1,51 @@
+<!-- signup popup -->
+<div id="signup-popup" class="mfp-hide">
+    <script type="text/javascript">
+    $(function() {
+        $('#emailText').keyup(function() {
+            $('#signupSubmit').prop("disabled", !($(this).val().replace(/ /g, '') != ''));
+        })
+        $('#nthuIDText').keyup(function() {
+            $('#signupSubmit').prop("disabled", !($(this).val().replace(/ /g, '') != ''));
+        })
+    })
+    </script>
+    <div class="jumbotron">
+        <h2>Sign Up</h2>
+        <form class="form-horizontal" action="" method="post">{% csrf_token %}
+            <input type='hidden' name='token' value={{token}}>
+            <div class="form-group">
+                <div class='row'>
+                    <label class="control-label col-md-2">Nthu OJ ID</label>
+                    <div class='col-md-10'>
+                        <input class="form-control" type="text" name='nthu_oj_id' id='nthuIDText' placeholder="NTHU OJ ID">
+                    </div>
+                </div>
+                <div class='row'>
+                    <label class="control-label col-md-2">Name</label>
+                    <div class='col-md-10'>
+                        <input class="form-control" type="text" name='name' placeholder="你的暱稱，也可以留空">
+                    </div>
+                </div>
+                <div class='row'>
+                    <label class="control-label col-md-2">E-mail</label>
+                    <div class='col-md-10'>
+                        <input class="form-control" type="text" name='email' id='emailText' placeholder="請留下常用的信箱，讓我們能聯絡到你！">
+                    </div>
+                </div>
+                <div class='row'>
+                    <label class="col-md-2 control-label">Message</label>
+                    <div class="col-md-10">
+                        <textarea class="form-control" rows="3" id="messageText" name='message' placeholder="其他想說的東西"></textarea>
+                        <span class="help-block">一些雜七雜八的東西都可以說</span>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <div style="display:inline;float:right;">
+                    <button type="submit" id='signupSubmit' disabled class="btn btn-primary" style="text-align:right;">Submit</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>

@@ -35,6 +35,7 @@ class SignUp(models.Model):
     email = models.TextField()
     message = models.TextField()
     time = models.DateTimeField(default=datetime.now(), editable=True, auto_now_add=True)
+    cid = models.IntegerField()
     def __unicode__(self):
         return 'nthu_oj_id: ' + str(self.nthu_oj_id) + '| time: ' + str(self.time)
 

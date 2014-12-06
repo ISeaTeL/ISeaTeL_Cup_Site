@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from contest.models import Clarification, Contest
+from contest.models import Clarification, Contest, SignUp
 from django.core.context_processors import csrf
 from django.core.urlresolvers import reverse
 from django.http import HttpResponse, HttpResponseRedirect
@@ -59,8 +59,7 @@ def get_status(contest_data):
     if status=='ended' or status=='running':
         return '<a class="btn btn-primary btn-lg" onclick="'+ "$('#p3').click()" + '" data-toggle="tab">'+status+'</a>'
     else:
-        return '<a class="btn btn-primary btn-lg href-popup-link" title="You can sign up here." href="' + contest_data.signup_url + '">'+status+'</a>'
-
+        return '<a href="#signup-popup" class="open-popup-link btn btn-primary btn-lg">Sign Up!!</a>'
 
 def contest(request, contest_id):
     magic_num = 7777
@@ -71,6 +70,8 @@ def contest(request, contest_id):
 
     if contest_data:
         if request.method == 'POST':
+            if all(x in request.POST for x in ['signup', 'nthu_oj_id', 'name', 'email', 'message']):
+                SignUp.objects.create(nthu_oj_id=request.POST['nthu_oj_id'], name=request.POST['name'], email=request.POST['email'], message=request.POST['message'], cid=contest_id)
             if all(x in request.POST for x in ['token', 'asker', 'question']):
                 if request.POST['asker'] != '' and int(request.POST['token']) % magic_mod == magic_num:
                     Clarification.objects.create(question=request.POST['question'], asker=request.POST['asker'], cid=contest_id)

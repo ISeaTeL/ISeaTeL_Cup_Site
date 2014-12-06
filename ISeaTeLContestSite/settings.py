@@ -30,10 +30,6 @@ ALLOWED_HOSTS = ['*',]
 
 # Sending email setting
 from password import GMAIL_PASSWORD 
-#GMAIL_PASSWORD = ''
-#with open('iseatel.password','r') as f:
-#    GMAIL_PASSWORD = f.read()
-
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_HOST_USER = 'iseatel.reply@gmail.com'
 EMAIL_HOST_PASSWORD = GMAIL_PASSWORD

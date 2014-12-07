@@ -4,6 +4,7 @@ from django.core.context_processors import csrf
 from django.core.urlresolvers import reverse
 from django.http import HttpResponse, HttpResponseRedirect
 from django.core.mail import send_mail
+from django.conf import settings
 
 import random
 import urllib2
@@ -66,7 +67,7 @@ def sign_up_reply(contest_data, request):
     reply_title = 'You have succeeded signing up ISeaTeL Cup on ' + contest_data.date 
     reply_content = str(render(request, "reply_signup.html", render_data)).replace('Content-Type: text/html; charset=utf-8', '')
     
-    from_email, to_email = 'iseatel.reply@gmail.com', request.POST['email']
+    from_email, to_email = settings.EMAIL_HOST_USER, request.POST['email']
     msg = EmailMultiAlternatives(reply_title, reply_content, from_email, [to_email])
     msg.attach_alternative(reply_content, "text/html")
     msg.send()
@@ -92,12 +93,23 @@ def contest(request, contest_id):
                     SignUp.objects.create(nthu_oj_id=request.POST['nthu_oj_id'], name=request.POST['name'], email=request.POST['email'], message=request.POST['message'], cid=contest_id)
                     sign_up_reply(contest_data, request)
                 except:
-                    return HttpResponse('<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><style type="text/css"></style></head><body><h1>QAQ</h1><p>Please provide valid data.<br><a href="/contest/' + str(contest_id) + '">Go back</a></p></body></html>')
+                    pass
+                    #return HttpResponse('<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><style type="text/css"></style></head><body><h1>QAQ</h1><p>Please provide valid data.<br><a href="/contest/' + str(contest_id) + '">Go back</a></p></body></html>')
+            
             if all(x in request.POST for x in ['token', 'asker', 'question']):
                 if request.POST['asker'] != '' and int(request.POST['token']) % magic_mod == magic_num:
                     Clarification.objects.create(question=request.POST['question'], asker=request.POST['asker'], cid=contest_id)
                 else:
                     Clarification.objects.create(question=request.POST['question'], cid=contest_id)
+                # when clarification is sent, notify admins
+                try:
+                    print send_mail('Clarification @ contest ' + str(contest_id), 
+                        'asker: %s:\nquestion : %s\n' % (request.POST['asker'], request.POST['question']), 
+                        settings.EMAIL_HOST_USER, 
+                        [email[1] for email in settings.ADMINS])
+                except:
+                    print 'send_email error'
+
             return HttpResponseRedirect(reverse("contest.views.contest", args=(contest_id,)))
 
         render_data["clarification_table"] = Clarification.objects.filter(cid=contest_id).order_by('-time')

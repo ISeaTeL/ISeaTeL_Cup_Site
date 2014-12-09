@@ -2,15 +2,15 @@
 <div id="clarification-popup" class="mfp-hide">
   <script type="text/javascript">
   $(function() {
-    $('#questionText').keyup(function() {
-      $('#clarSubmit').prop("disabled", !($(this).val().replace(/ /g, '') != ''));
-    })
+    setInterval(function() {
+      $('#clarSubmit').prop("disabled", !($('#questionText').val().replace(/ /g, '') != ''));
+    }, 100);
   })
   </script>
   <div class="jumbotron">
     <h2>Send Clarification</h2>
     <form class="form-horizontal" action="" method="post">{% csrf_token %}
-      <input type='hidden' name='token' value={{token}}>
+      <input type='hidden' name='token' value= {{token}}>
       <div class="form-group">
         <div class='row'>
           <label class="control-label col-md-2">Name</label>

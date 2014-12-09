@@ -2,16 +2,11 @@
 <div id="signup-popup" class="mfp-hide">
   <script type="text/javascript">
   $(function() {
-    $('#emailText').keyup(function() {
+    setInterval(function() {
       $('#signupSubmit').prop("disabled", (!($('#emailText').val().replace(/ /g, '') != '')) ||
         (!($('#nthuIDText').val().replace(/ /g, '') != ''))
       );
-    })
-    $('#nthuIDText').keyup(function() {
-      $('#signupSubmit').prop("disabled", (!($('#emailText').val().replace(/ /g, '') != '')) ||
-        (!($('#nthuIDText').val().replace(/ /g, '') != ''))
-      );
-    })
+    }, 100);
   })
   </script>
   <div class="jumbotron">

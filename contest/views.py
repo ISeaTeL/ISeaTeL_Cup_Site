@@ -62,6 +62,7 @@ def sign_up_reply(contest_data, request):
     render_data = {}
     render_data["register_name"] = request.POST['nthu_oj_id']
     render_data["contest_name"] = contest_data.title
+    render_data["contest_date"] = contest_data.date
     render_data["contest_cid"] = contest_data.cid
     
     reply_title = 'You have succeeded signing up ISeaTeL Cup on ' + contest_data.date 

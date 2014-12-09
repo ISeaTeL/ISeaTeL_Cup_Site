@@ -103,7 +103,7 @@ def contest(request, contest_id):
                     Clarification.objects.create(question=request.POST['question'], cid=contest_id)
                 # when clarification is sent, notify admins
                 try:
-                    print send_mail('Clarification @ contest ' + str(contest_id), 
+                    send_mail('Clarification @ contest ' + str(contest_id), 
                         'asker: %s:\nquestion : %s\n' % (request.POST['asker'], request.POST['question']), 
                         settings.EMAIL_HOST_USER, 
                         [email[1] for email in settings.ADMINS])

@@ -31,11 +31,11 @@ ALLOWED_HOSTS = ['*',]
 # Sending email setting
 from password import GMAIL_PASSWORD 
 EMAIL_HOST = 'smtp.gmail.com'
-EMAIL_HOST_USER = 'iseatel.reply@gmail.com'
+EMAIL_HOST_USER = 'iseatel@iseatel.org'
 EMAIL_HOST_PASSWORD = GMAIL_PASSWORD
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
-DEFAULT_FROM_EMAIL = 'iseatel.reply@gmail.com'
+DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 
 

@@ -1,5 +1,6 @@
 ##Needed plugin:
 - beautifulsoup4
+- grappelli
 
 ##Usage:
 ```sh

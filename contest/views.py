@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 from django.shortcuts import render
 from contest.models import Clarification, Contest, SignUp
 from django.core.context_processors import csrf

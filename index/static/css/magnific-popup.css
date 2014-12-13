@@ -213,7 +213,7 @@ button::-moz-focus-inner {
   .mfp-iframe-holder .mfp-content {
     line-height: 0;
     border-radius: 5px; 
-    overflow: hidden;
+    /*overflow: hidden;*/
     width: 98%;
     height: 90%;
     max-width: 2000px; }

@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 from django.shortcuts import render
 from contest.models import Clarification, Contest, SignUp
 from django.core.context_processors import csrf
@@ -26,6 +28,7 @@ def get_scoreboard(contest_data):
 
     url = contest_data.scoreboard_url
     html = fetch_table(url)
+    html = re.sub('AContestant', random.choice(['清大最強 CKL', 'Chunk Lee', '清大最強 Chuck Lee', 'AContestant']), html)
     html = re.sub('<td>', '<td class="text-center">', html)
     html = re.sub('<th>', '<th class="text-center">', html)
     html = re.sub('0/[0-9]', '<div class="btn-danger text-center">0/1</div>', html)

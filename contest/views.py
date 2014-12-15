@@ -18,7 +18,7 @@ INCOMING_HTML = '<h3>Incoming.</h3>'
 
 def fetch_table(url):
     try:
-        response = urllib2.urlopen(url)
+        response = urllib2.urlopen(url, timeout=1)
         html = response.read()
         soup = BeautifulSoup(html)
         return str(soup.find_all('table')[1])
@@ -86,9 +86,7 @@ def get_status(contest_data):
     else:
         return '<a href="#signup-popup" class="open-popup-link btn btn-primary btn-lg">Sign Up!!</a>'
 
-def contest(request, contest_id):
-    return HttpResponse('OJ 炸裂了')
-    
+def contest(request, contest_id):    
     magic_num = 7777
     magic_mod = 2345678
 

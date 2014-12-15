@@ -4,7 +4,7 @@ from django.shortcuts import render
 from contest.models import Clarification, Contest, SignUp, Dictionary
 from django.core.context_processors import csrf
 from django.core.urlresolvers import reverse
-from django.http import HttpResponse, HttpResponseRedirect
+from django.http import HttpResponse, HttpResponseRedirect, HttpResponseNotFound
 from django.core.mail import send_mail
 from django.conf import settings
 
@@ -15,6 +15,7 @@ from bs4 import BeautifulSoup
 
 # Create your views here.
 INCOMING_HTML = '<h3>Incoming.</h3>'
+PAGE_NOT_FOUND = '<div style="height:50%"></div><center><h1>QAQ<br>What have you done...</h1></center>'
 
 def fetch_table(url):
     try:
@@ -78,7 +79,7 @@ def sign_up_reply(contest_data, request):
     render_data["contest_date"] = contest_data.date
     render_data["contest_cid"] = contest_data.cid
     
-    reply_title = 'You have succeeded signing up ISeaTeL Cup on ' + contest_data.date 
+    reply_title = '您已成功註冊 ' + contest_data.date 
     reply_content = str(render(request, "reply_signup.html", render_data)).replace('Content-Type: text/html; charset=utf-8', '')
     
     from_email, to_email = settings.EMAIL_HOST_USER, request.POST['email']
@@ -108,7 +109,6 @@ def contest(request, contest_id):
                     sign_up_reply(contest_data, request)
                 except:
                     pass
-                    #return HttpResponse('<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><style type="text/css"></style></head><body><h1>QAQ</h1><p>Please provide valid data.<br><a href="/contest/' + str(contest_id) + '">Go back</a></p></body></html>')
             
             if all(x in request.POST for x in ['token', 'asker', 'question']):
                 if request.POST['asker'] != '' and int(request.POST['token']) % magic_mod == magic_num:
@@ -135,5 +135,41 @@ def contest(request, contest_id):
         render_data["head_status"] = get_status(contest_data)
         return render(request, "contest.html", render_data)
     else:
-        return HttpResponse('<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><style type="text/css"></style></head><body><h1>Not Found</h1><p>The requested URL was not found on this server.</p></body></html>')
+        return HttpResponseNotFound(PAGE_NOT_FOUND)
+
+
+def rank(request, contest_id):    
+    contest_data = Contest.objects.filter(cid=contest_id).first()
+    render_data = {}
+
+    if contest_data:
+        signups = SignUp.objects.filter(cid=contest_id)
+        table = get_scoreboard(contest_data)
+        soup = BeautifulSoup(table)
+
+        oj_ids = [str(x.nthu_oj_id) for x in signups]
+        rank_list = []
+
+        for tr in soup.find_all('tr'):
+            tds = tr.find_all('td')
+            if tds:
+                oj_id = tds[0].string
+                rank_list += [str(oj_id)]
+
+        prizes = []
+        place = 1
+        for x in rank_list:
+            if x in oj_ids:
+                user = signups.filter(nthu_oj_id=x).first()
+                prizes += [{ 'place': place,
+                            'ojid': user.nthu_oj_id,
+                            'email': user.email,
+                            'name': user.name}]
+                place += 1        
+
+        render_data['prizes'] = prizes
+        render_data["scoreboard_table"] = table
+        return render(request, "rank.html", render_data)
+    else:
+        return HttpResponseNotFound(PAGE_NOT_FOUND)
 

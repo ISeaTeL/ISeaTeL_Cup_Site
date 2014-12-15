@@ -87,6 +87,8 @@ def get_status(contest_data):
         return '<a href="#signup-popup" class="open-popup-link btn btn-primary btn-lg">Sign Up!!</a>'
 
 def contest(request, contest_id):
+    return HttpResponse('OJ 炸裂了')
+    
     magic_num = 7777
     magic_mod = 2345678
 

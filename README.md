@@ -1,6 +1,9 @@
 ##Needed plugin:
 - beautifulsoup4
-django-grappelli
+- django-grappelli
+
+##Used utility
+ - [Django Dictionary Model](https://djangosnippets.org/snippets/2451/)
 ##Usage:
 ```sh
 cd ISeaTeL_Cup_Site

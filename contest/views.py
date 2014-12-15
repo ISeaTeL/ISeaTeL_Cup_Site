@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from django.shortcuts import render
-from contest.models import Clarification, Contest, SignUp
+from contest.models import Clarification, Contest, SignUp, Dictionary
 from django.core.context_processors import csrf
 from django.core.urlresolvers import reverse
 from django.http import HttpResponse, HttpResponseRedirect
@@ -21,9 +21,16 @@ def fetch_table(url):
         response = urllib2.urlopen(url, timeout=1)
         html = response.read()
         soup = BeautifulSoup(html)
-        return str(soup.find_all('table')[1])
+        table = str(soup.find_all('table')[1])
+        Dictionary.getDict('url2table')[url] = table
+        return table
     except:
-        return 'OJ 炸裂了'
+        m = Dictionary.getDict('url2table')
+        if url in m.keys():
+            return m[url]
+        else:
+            return 'ＯＪ 炸裂了'
+
 
 def get_scoreboard(contest_data):
     if(contest_data.status=='incoming'):

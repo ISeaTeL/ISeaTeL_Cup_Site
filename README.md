@@ -1,6 +1,7 @@
 ##Needed plugin:
 - beautifulsoup4
 - grappelli
+- django-grappelli
 
 ##Usage:
 ```sh

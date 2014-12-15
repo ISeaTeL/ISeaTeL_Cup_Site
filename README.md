@@ -4,6 +4,7 @@
 
 ##Used utility
  - [Django Dictionary Model](https://djangosnippets.org/snippets/2451/)
+
 ##Usage:
 ```sh
 cd ISeaTeL_Cup_Site
@@ -14,4 +15,10 @@ alias dj='python manage.py'
 dj makemigrations
 dj syncdb
 dj runserver --insecure
+```
+after that
+```
+dj shell
+execfile('initdb.py')
+
 ```

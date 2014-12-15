@@ -17,10 +17,13 @@ from bs4 import BeautifulSoup
 INCOMING_HTML = '<h3>Incoming.</h3>'
 
 def fetch_table(url):
-    response = urllib2.urlopen(url)
-    html = response.read()
-    soup = BeautifulSoup(html)
-    return str(soup.find_all('table')[1])
+    try:
+        response = urllib2.urlopen(url)
+        html = response.read()
+        soup = BeautifulSoup(html)
+        return str(soup.find_all('table')[1])
+    except:
+        return 'OJ 炸裂了'
 
 def get_scoreboard(contest_data):
     if(contest_data.status=='incoming'):

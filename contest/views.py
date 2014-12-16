@@ -1,21 +1,26 @@
 # -*- coding: utf-8 -*-
 
 from django.shortcuts import render
-from contest.models import Clarification, Contest, SignUp, Dictionary
 from django.core.context_processors import csrf
 from django.core.urlresolvers import reverse
 from django.http import HttpResponse, HttpResponseRedirect, HttpResponseNotFound
 from django.core.mail import send_mail
 from django.conf import settings
 
+from contest.models import *
+
 import random
 import urllib2
 import re
+import sys
 from bs4 import BeautifulSoup
 
 # Create your views here.
 INCOMING_HTML = '<h3>Incoming.</h3>'
 PAGE_NOT_FOUND = '<div style="height:50%"></div><center><h1>QAQ<br>What have you done...</h1></center>'
+
+reload(sys)
+sys.setdefaultencoding('utf-8')
 
 def fetch_table(url):
     try:
@@ -78,15 +83,16 @@ def sign_up_reply(contest_data, request):
     render_data["contest_name"] = contest_data.title
     render_data["contest_date"] = contest_data.date
     render_data["contest_cid"] = contest_data.cid
-    
-    reply_title = '您已成功註冊 ' + contest_data.date 
-    reply_content = str(render(request, "reply_signup.html", render_data)).replace('Content-Type: text/html; charset=utf-8', '')
-    
-    from_email, to_email = settings.EMAIL_HOST_USER, request.POST['email']
-    msg = EmailMultiAlternatives(reply_title, reply_content, from_email, [to_email])
-    msg.attach_alternative(reply_content, "text/html")
-    msg.send()
-    
+    try:
+        reply_title = '您已成功註冊 ' + contest_data.date 
+        reply_content = str(render(request, "reply_signup.html", render_data)).replace('Content-Type: text/html; charset=utf-8', '')
+        
+        from_email, to_email = settings.EMAIL_HOST_USER, request.POST['email']
+        msg = EmailMultiAlternatives(reply_title, reply_content, from_email, [to_email])
+        msg.attach_alternative(reply_content, "text/html")
+        msg.send()
+    except:
+        pass
 def get_status(contest_data):
     status = contest_data.status
     if status=='ended' or status=='running':
@@ -94,42 +100,45 @@ def get_status(contest_data):
     else:
         return '<a href="#signup-popup" class="open-popup-link btn btn-primary btn-lg">Sign Up!!</a>'
 
-def contest(request, contest_id):    
-    magic_num = 7777
-    magic_mod = 2345678
 
+def contest(request, contest_id):    
     contest_data = Contest.objects.filter(cid=contest_id).first()
     render_data = {}
 
     if contest_data:
         if request.method == 'POST':
-            if all(x in request.POST for x in ['signup', 'nthu_oj_id', 'name', 'email', 'message']):
-                try:
-                    SignUp.objects.create(nthu_oj_id=request.POST['nthu_oj_id'], name=request.POST['name'], email=request.POST['email'], message=request.POST['message'], cid=contest_id)
+            if 'email' in request.POST:
+                # create a form instance and populate it with data from the request:
+                signupform = SignUpForm(request.POST, instance=SignUp(cid=contest_id))
+                # check whether it's valid:
+                if signupform.is_valid():
+                    signupform.save()
                     sign_up_reply(contest_data, request)
-                except:
-                    pass
-            
-            if all(x in request.POST for x in ['token', 'asker', 'question']):
-                if request.POST['asker'] != '' and int(request.POST['token']) % magic_mod == magic_num:
-                    Clarification.objects.create(question=request.POST['question'], asker=request.POST['asker'], cid=contest_id)
-                else:
-                    Clarification.objects.create(question=request.POST['question'], cid=contest_id)
-                # when clarification is sent, notify admins
-                try:
-                    send_mail('Clarification @ contest ' + str(contest_id), 
-                        'asker: %s:\nquestion : %s\n' % (request.POST['asker'], request.POST['question']), 
-                        settings.EMAIL_HOST_USER, 
-                        [email[1] for email in settings.ADMINS])
-                except:
-                    print 'send_email error'
 
-            return HttpResponseRedirect(reverse("contest.views.contest", args=(contest_id,)))
+                    return render(request, 'form.html', {'form': SignUpForm(), 'message': '您已成功傳送訊息'})
+                else:
+                    return render(request, 'form.html', {'form': signupform})
+            else:
+                clarificationform = ClarificationForm(request.POST, instance=Clarification(asker='', cid=contest_id, reply='No reply yet.'))
+                if clarificationform.is_valid():
+                    clarificationform.save()
+                    try:
+                        send_mail('Clarification @ contest ' + str(contest_id), 
+                            'asker: %s:\nquestion : %s\n' % (request.POST['asker'], request.POST['question']), 
+                            settings.EMAIL_HOST_USER, 
+                            [email[1] for email in settings.ADMINS])
+                    except:
+                        print 'send_email error'
+                    return render(request, 'form.html', {'form': ClarificationForm(), 'message': '您已成功傳送訊息'})
+                else:
+                    return render(request, 'form.html', {'form': clarificationform})
+
+        render_data["signup_form"] = SignUpForm()
+        render_data["clarification_form"] = ClarificationForm()
 
         render_data["clarification_table"] = Clarification.objects.filter(cid=contest_id).order_by('-time')
         render_data["scoreboard_table"] = get_scoreboard(contest_data)
         render_data["problem_table"] = get_problem(contest_data)
-        render_data["token"] = random.getrandbits(128)*magic_mod + magic_num
         render_data["head_title"] = contest_data.title
         render_data["head_content"] = contest_data.content
         render_data["head_status"] = get_status(contest_data)

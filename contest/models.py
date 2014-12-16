@@ -1,4 +1,9 @@
+# -*- coding: utf-8 -*-
+
 from django.db import models
+from django.forms import ModelForm
+from django import forms
+
 from datetime import datetime
 # Create your models here.
 
@@ -10,6 +15,21 @@ class Clarification(models.Model):
     time = models.DateTimeField(default=datetime.now(), editable=True, auto_now_add=True)
     def __unicode__(self):
         return 'question: ' + self.question + ' | reply: ' + self.reply + ' @' + str(self.time.date())
+
+class ClarificationForm(ModelForm):
+    class Meta:
+        model = Clarification
+        fields = ['asker', 'question']
+    asker = forms.CharField(label='Name', max_length=100, required=False,
+        widget=forms.TextInput(
+            attrs={'class': 'form-control', 
+            'placeholder': 'Anonymous'}))
+    
+    question = forms.CharField(label='Message', max_length=1000,
+        widget=forms.Textarea(
+            attrs={'class': 'form-control', 'rows': 3,
+            'placeholder': '你的疑問'}))
+
 
 class Contest(models.Model):
     cid = models.IntegerField(unique=True)
@@ -37,7 +57,28 @@ class SignUp(models.Model):
     time = models.DateTimeField(default=datetime.now(), editable=True, auto_now_add=True)
     cid = models.IntegerField()
     def __unicode__(self):
-        return 'nthu_oj_id: ' + str(self.nthu_oj_id) + '| time: ' + str(self.time)
+        return 'oj_id: ' + str(self.nthu_oj_id) + '| time: ' + str(self.time)
+
+class SignUpForm(ModelForm):
+    class Meta:
+        model = SignUp
+        fields = ['nthu_oj_id', 'name', 'email', 'message']
+    nthu_oj_id = forms.CharField(label='NTHU OJ ID', max_length=100,
+        widget=forms.TextInput(
+            attrs={'class': 'form-control', 
+            'placeholder': 'NTHU OJ ID'}))
+    name = forms.CharField(label='Name', max_length=100, required=False,
+        widget=forms.TextInput(
+            attrs={'class': 'form-control', 
+            'placeholder': '你的暱稱，也可以留空'}))
+    email = forms.EmailField(label='E-mail', max_length=100,
+        widget=forms.TextInput(
+            attrs={'class': 'form-control', 
+            'placeholder': '請留下常用的信箱，讓我們能聯絡到你！'}))
+    message = forms.CharField(label='Message', max_length=100, required=False,
+        widget=forms.Textarea(
+            attrs={'class': 'form-control', 'rows': 3,
+            'placeholder': '其他想說的東西\n一些雜七雜八的東西都可以說'}))
 
 # Dictionary Helper Models
 

@@ -31,27 +31,9 @@
   <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/jqueryui/1.11.2/jquery-ui.min.css">
   <script src="//cdnjs.cloudflare.com/ajax/libs/jqueryui/1.11.2/jquery-ui.min.js"></script>
 
-  <style type="text/css">
-  h2 {
-    margin: 1% !important;
-  }
-  .form-group {
-    margin: 1% !important;
-  }
-  .container-fluid {
-    margin-top: 5%;
-  }
-
-  </style>
-  <script type="text/javascript">
-  $(function() {
-    $(document).tooltip({
-      track: true
-    });
-  })
-
-  </script>
-
+  <!-- main settings -->
+  <script src={%static "js/mainsettings.js"%}></script>
+  <link rel="stylesheet" href={% static "css/mainsettings.css"%}>
 </head>
 
 <body>
@@ -82,11 +64,7 @@
       </ul>
 
       <ul class="nav navbar-nav navbar-right">
-        <!--
-                <li style='margin-right:10px'>
-                    <a href="#login-popup" class="open-popup-link"><b>Login</b></a>
-                </li>
-                -->
+
       </ul>
     </div>
   </div>
@@ -97,7 +75,6 @@
       <p>This is a simple and fun contest for beginners.</p>
       <p><a class="btn btn-primary btn-lg" href="contest/2">比賽連結</a>
       </p>
-      <!--<p><a class="btn btn-primary btn-lg">Learn more</a></p>-->
     </div>
     <!-- bulletin board -->
     <div class="panel panel-primary">

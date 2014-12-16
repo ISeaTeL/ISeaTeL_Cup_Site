@@ -147,7 +147,7 @@ def rank(request, contest_id):
         table = get_scoreboard(contest_data)
         soup = BeautifulSoup(table)
 
-        oj_ids = [str(x.nthu_oj_id) for x in signups]
+        oj_ids = [str(x.nthu_oj_id.lower()) for x in signups]
         rank_list = []
 
         for tr in soup.find_all('tr'):
@@ -159,8 +159,8 @@ def rank(request, contest_id):
         prizes = []
         place = 1
         for x in rank_list:
-            if x in oj_ids:
-                user = signups.filter(nthu_oj_id__iexact=x).first()
+            if x.lower() in oj_ids:
+                user = signups.filter(nthu_oj_id=x).first()
                 prizes += [{ 'place': place,
                             'ojid': user.nthu_oj_id,
                             'email': user.email,

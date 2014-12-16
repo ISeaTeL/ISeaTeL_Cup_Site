@@ -160,7 +160,7 @@ def rank(request, contest_id):
         place = 1
         for x in rank_list:
             if x.lower() in oj_ids:
-                user = signups.filter(nthu_oj_id=x).first()
+                user = signups.filter(nthu_oj_id__iexact=x).first()
                 prizes += [{ 'place': place,
                             'ojid': user.nthu_oj_id,
                             'email': user.email,

@@ -80,6 +80,7 @@ class SignUpForm(ModelForm):
             attrs={'class': 'form-control', 'rows': 3,
             'placeholder': '其他想說的東西\n一些雜七雜八的東西都可以說'}))
 
+
 # Dictionary Helper Models
 
 class Dictionary(models.Model):

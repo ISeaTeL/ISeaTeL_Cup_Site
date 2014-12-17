@@ -1,4 +1,7 @@
 # -*- coding: utf-8 -*-
+from django.shortcuts import render_to_response
+
+
 from contest.models import *
 
 from bs4 import BeautifulSoup
@@ -8,7 +11,7 @@ import urllib2
 import re
 import sys
 
-INCOMING_HTML = '<h3>Incoming.</h3>'
+INCOMING_HTML = '<center><h1>Wait<br>The contest is yet to start.</h1></center>'
 PAGE_NOT_FOUND = '<div style="height:50%"></div><center><h1>QAQ<br>What have you done...</h1></center>'
 
 reload(sys)
@@ -43,6 +46,12 @@ def get_scoreboard(contest_data):
     html = re.sub('1/1', '<div class="btn-success text-center">1/1</div>', html)
     html = re.sub('4/4', '<div class="btn-success text-center">4/4</div>', html)
     return html
+
+def get_clarification(contest_data):
+    clars = Clarification.objects.filter(cid=contest_data.cid).order_by('-time')
+    response = str(render_to_response("clarification_table.html", {"clarifications": clars}))
+    return response.replace('Content-Type: text/html; charset=utf-8', '')
+
 
 def get_solution_html(idx, base_url):
     prob = 'p' + str(unichr(ord('a')+idx-1))

@@ -6,11 +6,20 @@ from contest.models import *
 from contest.crawler import *
 from contest.email_reply import *
 
+import json
+
 def contest(request, contest_id):    
     contest_data = Contest.objects.filter(cid=contest_id).first()
     render_data = {}
 
     if contest_data:
+        if request.is_ajax() and 'email' not in request.POST and 'asker' not in request.POST:
+            data = {
+                "scoreboard_table": str(get_scoreboard(contest_data)),
+                "clarification_table": str(get_clarification(contest_data))
+            }
+            return HttpResponse(json.dumps(data))
+
         if request.method == 'POST':
             if 'email' in request.POST:
                 # create a form instance and populate it with data from the request:
@@ -35,14 +44,12 @@ def contest(request, contest_id):
         render_data["signup_form"] = SignUpForm()
         render_data["clarification_form"] = ClarificationForm()
 
-        render_data["clarification_table"] = Clarification.objects.filter(cid=contest_id).order_by('-time')
-        render_data["scoreboard_table"] = get_scoreboard(contest_data)
         render_data["problem_table"] = get_problem(contest_data)
         render_data["head_title"] = contest_data.title
         render_data["head_content"] = contest_data.content
         render_data["head_status"] = get_status(contest_data)
         return render(request, "contest.html", render_data)
-    
+
     else:
         return HttpResponseNotFound(PAGE_NOT_FOUND)
 

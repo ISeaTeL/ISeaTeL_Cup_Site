@@ -9,9 +9,9 @@ from datetime import datetime
 
 class Clarification(models.Model):
     cid = models.IntegerField()
-    asker = models.TextField(default='Anonymous')
+    asker = models.TextField()
     question = models.TextField()
-    reply = models.TextField(default='No reply yet.')
+    reply = models.TextField()
     time = models.DateTimeField(default=datetime.now(), editable=True, auto_now_add=True)
     def __unicode__(self):
         return 'question: ' + self.question + ' | reply: ' + self.reply + ' @' + str(self.time.date())
@@ -20,6 +20,7 @@ class ClarificationForm(ModelForm):
     class Meta:
         model = Clarification
         fields = ['asker', 'question']
+
     asker = forms.CharField(label='Name', max_length=100, required=False,
         widget=forms.TextInput(
             attrs={'class': 'form-control', 
@@ -29,7 +30,8 @@ class ClarificationForm(ModelForm):
         widget=forms.Textarea(
             attrs={'class': 'form-control', 'rows': 3,
             'placeholder': '你的疑問'}))
-
+    form_name = forms.CharField(label='', initial='ClarificationForm',
+        widget=forms.HiddenInput())
 
 class Contest(models.Model):
     cid = models.IntegerField(unique=True)
@@ -79,7 +81,8 @@ class SignUpForm(ModelForm):
         widget=forms.Textarea(
             attrs={'class': 'form-control', 'rows': 3,
             'placeholder': '其他想說的東西\n一些雜七雜八的東西都可以說'}))
-
+    form_name = forms.CharField(label='', initial='SignUpForm',
+        widget=forms.HiddenInput())
 
 # Dictionary Helper Models
 

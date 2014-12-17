@@ -20,8 +20,8 @@ def contest(request, contest_id):
             }
             return HttpResponse(json.dumps(data))
 
-        if request.method == 'POST':
-            if 'email' in request.POST:
+        if request.method == 'POST' and 'form_name' in request.POST:
+            if request.POST['form_name'] == 'SignUpForm':
                 # create a form instance and populate it with data from the request:
                 signupform = SignUpForm(request.POST, instance=SignUp(cid=contest_id))
                 # check whether it's valid:
@@ -32,10 +32,12 @@ def contest(request, contest_id):
                     return render(request, 'form.html', {'form': SignUpForm(), 'message': '您已成功傳送訊息'})
                 else:
                     return render(request, 'form.html', {'form': signupform})
-            else:
+            if request.POST['form_name'] == 'ClarificationForm':
                 clarificationform = ClarificationForm(request.POST, instance=Clarification(asker='', cid=contest_id, reply='No reply yet.'))
                 if clarificationform.is_valid():
-                    clarificationform.save()
+                    clar = clarificationform.save(commit=False)
+                    clar.asker = 'Anonymous' if clar.asker == '' else clar.asker
+                    clar.save()
                     clarification_reply(contest_data, request)
                     return render(request, 'form.html', {'form': ClarificationForm(), 'message': '您已成功傳送訊息'})
                 else:

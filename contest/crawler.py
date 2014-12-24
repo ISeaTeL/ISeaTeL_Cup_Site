@@ -39,7 +39,7 @@ def get_scoreboard(contest_data):
 
     url = contest_data.scoreboard_url
     html = fetch_table(url)
-    html = re.sub('AContestant', random.choice(['CKL', 'Chuck Lee', 'AContestant', '清大最強ＣＫＬ']), html)
+    html = re.sub('AContestant', random.choice(['CKL', 'Chuck Lee', 'AContestant']), html)
     html = re.sub('<td>', '<td class="text-center">', html)
     html = re.sub('<th>', '<th class="text-center">', html)
     html = re.sub('0/[0-9]', '<div class="btn-danger text-center">0/1</div>', html)

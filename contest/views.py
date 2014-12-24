@@ -91,3 +91,12 @@ def rank(request, contest_id):
     else:
         return HttpResponseNotFound(PAGE_NOT_FOUND)
 
+def competitor(request, contest_id):    
+    contest_data = SignUp.objects.filter(cid=contest_id)
+    render_data = {}
+
+    if contest_data:
+        render_data['competitor'] = contest_data
+        return render(request, "competitor.html", render_data)
+    else:
+        return HttpResponseNotFound(PAGE_NOT_FOUND)

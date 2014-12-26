@@ -5,7 +5,9 @@
 {% load markdown_deux_tags %}
 
 <div class="container-fluid">
-{{ problem.content|markdown }}
+ <div class="jumbotron">
+		{{ problem.content|markdown }}
+	</div>
 </div>
 
 {% include "judge.html" %}

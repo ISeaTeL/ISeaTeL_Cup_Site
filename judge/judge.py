@@ -13,7 +13,9 @@ def run(sid,pid,source,lang,timelimit,memlimit):
 		}
 
 	run_dir='/home/ISeaTeL/ISeaTeL_Cup_Site/judge/run/%d' % sid
-	print run_dir
+	prob_dir='../../../media/problem/%d' % pid
+	print run_dir, prob_dir
+	
 	shutil.rmtree(run_dir, ignore_errors=True)
 
 	os.mkdir(run_dir)
@@ -44,8 +46,8 @@ def run(sid,pid,source,lang,timelimit,memlimit):
 		e=file('err','r')
 		judge_result['message']=e.read()
 		return judge_result
-	cmd['GCC']='../antiskill -i ../../problem/%d/in -o out -t %d -m %d Main' % (pid, timelimit, memlimit)
-	cmd['G++']='../antiskill -i ../../problem/%d/in -o out -t %d -m %d Main' % (pid, timelimit, memlimit)
+	cmd['GCC']='../antiskill -i %s/in -o out -t %d -m %d Main' % (prob_dir, timelimit, memlimit)
+	cmd['G++']='../antiskill -i %s/in -o out -t %d -m %d Main' % (prob_dir, timelimit, memlimit)
 	
 	print cmd[lang]
 	
@@ -70,7 +72,7 @@ def run(sid,pid,source,lang,timelimit,memlimit):
 
 			if(result == 'OK'):
 				out='out'
-				outdata='../../problem/%d/out' % pid
+				outdata='%s/out' % (prob_dir)
 				if filecmp.cmp(out, outdata):
 					judge_result['result'] = 'AC'
 				else:

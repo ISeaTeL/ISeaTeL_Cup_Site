@@ -22,7 +22,7 @@ STATIC_URL = '/static/'
 SECRET_KEY = 'p%$%@0x3f*mt^crlor_2r3vujh2&!4%e^cc3wbw+6=dqm&pt3x'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 TEMPLATE_DEBUG = False
 
@@ -47,6 +47,8 @@ MANAGERS = ADMINS
 
 INSTALLED_APPS = (
     'grappelli',
+    'pagedown',
+    'markdown_deux',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -57,6 +59,7 @@ INSTALLED_APPS = (
     'contest',
     'forms',
     'judge',
+    'problem',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -101,5 +104,6 @@ USE_TZ = True
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.7/howto/static-files/
-
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+MEDIA_URL = '/media/'
 STATIC_URL = '/static/'

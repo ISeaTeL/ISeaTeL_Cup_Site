@@ -15,8 +15,8 @@ def contest(request, contest_id):
     if contest_data:
         if request.is_ajax() and 'email' not in request.POST and 'asker' not in request.POST:
             data = {
-                "scoreboard_table": str(get_scoreboard(contest_data)),
-                "clarification_table": str(get_clarification(contest_data))
+                'scoreboard_table': str(get_scoreboard(contest_data)),
+                'clarification_table': str(get_clarification(contest_data))
             }
             return HttpResponse(json.dumps(data))
 
@@ -43,14 +43,14 @@ def contest(request, contest_id):
                 else:
                     return render(request, 'form.html', {'form': clarificationform})
 
-        render_data["signup_form"] = SignUpForm()
-        render_data["clarification_form"] = ClarificationForm()
+        render_data['signup_form'] = SignUpForm()
+        render_data['clarification_form'] = ClarificationForm()
 
-        render_data["problem_table"] = get_problem(contest_data)
-        render_data["head_title"] = contest_data.title
-        render_data["head_content"] = contest_data.content
-        render_data["head_status"] = get_status(contest_data)
-        return render(request, "contest.html", render_data)
+        render_data['problem_table'] = get_problem(contest_data)
+        render_data['head_title'] = contest_data.title
+        render_data['head_content'] = contest_data.content
+        render_data['head_status'] = get_status(contest_data)
+        return render(request, 'contest.html', render_data)
 
     else:
         return HttpResponseNotFound(PAGE_NOT_FOUND)
@@ -86,8 +86,8 @@ def rank(request, contest_id):
                 place += 1        
 
         render_data['prizes'] = prizes
-        render_data["scoreboard_table"] = table
-        return render(request, "rank.html", render_data)
+        render_data['scoreboard_table'] = table
+        return render(request, 'rank.html', render_data)
     else:
         return HttpResponseNotFound(PAGE_NOT_FOUND)
 
@@ -97,6 +97,6 @@ def competitor(request, contest_id):
 
     if contest_data:
         render_data['competitor'] = contest_data
-        return render(request, "competitor.html", render_data)
+        return render(request, 'competitor.html', render_data)
     else:
         return HttpResponseNotFound(PAGE_NOT_FOUND)

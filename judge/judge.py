@@ -13,7 +13,7 @@ def run(sid,pid,source,lang,timelimit,memlimit):
 		}
 
 	run_dir='/home/ISeaTeL/ISeaTeL_Cup_Site/judge/run/%d' % sid
-		
+	print run_dir
 	shutil.rmtree(run_dir, ignore_errors=True)
 
 	os.mkdir(run_dir)

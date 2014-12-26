@@ -44,7 +44,7 @@ int main() {
 			lang = submitform.cleaned_data['language']
 			judge_result = 'fuck'
 			try:
-				judge_result = judge.run(1,1,code,lang,1000,32000)
+				judge_result = judge.run(random.randint(1,10000),1,code,lang,1000,32000)
 				print judge_result
 			except Exception as e:
 				print 'judge GG'

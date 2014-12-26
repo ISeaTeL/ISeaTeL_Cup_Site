@@ -56,7 +56,11 @@ def problem(request, problem_id):
                 lang = submitform.cleaned_data['language']
                 judge_result = 'GG'
                 try:
-                    judge_result = judge.run(random.randint(1,10000),1,code,lang,1000,32000)
+                    judge_result = judge.run(random.randint(1,10000),
+                        problem_data.pid,
+                        code,lang,
+                        problem_data.time_limit,
+                        problem_data.mem_limit)
                     print judge_result
                 except:
                     print 'judge GG'

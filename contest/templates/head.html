@@ -1,5 +1,7 @@
 <div class="jumbotron">
-  <h3>{{head_title|safe}}</h3>
-  <p>{{head_content|safe|linebreaks}}</p>
-  <h4>Status: {{head_status|safe}}</h4> {%include 'signup.html'%}
+  <h3>{{ head_title|safe }}</h3>
+  <p>{{ head_content|safe|linebreaks }}</p>
+  <h4>Status: {{ head_status|safe }}</h4>
+  {% include 'popup_form.html' with title='Sign Up' popup_id='signup-popup' form=signup_form %}
+
 </div>

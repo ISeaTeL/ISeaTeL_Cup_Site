@@ -1,0 +1,8 @@
+{%extends "base.html"%}
+{%block body_block%}
+{%include 'popup_form.html' with popup_id='f' form=form1 to='/signup/' %}
+<a href="#f" class="open-popup-link  btn btn-danger">Form</a>
+
+{%include 'popup_form.html' with popup_id='fk' form=form2 to='' %}
+<a href="#fk" class="open-popup-link  btn btn-danger">Form</a>
+{%endblock body_block%}

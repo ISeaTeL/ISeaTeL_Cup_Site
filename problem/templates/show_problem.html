@@ -1,0 +1,16 @@
+{%extends "base.html"%}
+{% load static %}
+{%block body_block%}
+<center><h3>{{ problem.pid }} - {{ problem.title }}</h3></center>
+{% load markdown_deux_tags %}
+
+<div class="container-fluid">
+ <div class="jumbotron">
+		{{ problem.content|markdown }}
+	</div>
+</div>
+
+{% include "judge.html" %}
+
+{%endblock body_block%}
+

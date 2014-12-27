@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from index.models import Bulletin, Visited
+from index.models import Bulletin
 
 # Create your views here.
 

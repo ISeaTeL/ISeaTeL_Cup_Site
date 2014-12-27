@@ -1,0 +1,27 @@
+{%extends "base.html"%} {%block body_block%}
+<div class="panel panel-primary">
+  <div class="panel-heading">
+    <h3 class="panel-title">Signup Contestant Competitor</h3>
+  </div>
+  <table class="table table-striped table-hover table-bordered">
+    <thead>
+      <tr>
+        <th class='col-md-3'>NTHU OJ ID</th>
+        <th class='col-md-3'>Email</th>
+        <th class='col-md-3'>Name</th>
+        <th class='col-md-3'>Message</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for people in competitor %}
+      <tr>
+        <td>{{ people.nthu_oj_id }}</td>
+        <td>{{ people.email }}</td>
+        <td>{{ people.name }}</td>
+        <td>{{ people.message }}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{%endblock body_block%}

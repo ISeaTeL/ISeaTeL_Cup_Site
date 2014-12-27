@@ -1,0 +1,27 @@
+{%extends "base.html"%} {%block body_block%} {%include 'scoreboard.html'%}
+<div class="panel panel-primary">
+  <div class="panel-heading">
+    <h3 class="panel-title">Signup Contestant Rank</h3>
+  </div>
+  <table class="table table-striped table-hover table-bordered">
+    <thead>
+      <tr>
+        <th class='col-md-2'>Rank</th>
+        <th class='col-md-4'>NTHU OJ ID</th>
+        <th class='col-md-4'>Email</th>
+        <th class='col-md-2'>Name</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for prize in prizes %}
+      <tr>
+        <td>{{ prize.place }}</td>
+        <td>{{ prize.ojid }}</td>
+        <td>{{ prize.email }}</td>
+        <td>{{ prize.name }}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{%endblock body_block%}

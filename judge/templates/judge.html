@@ -1,0 +1,50 @@
+{% load static %}
+
+<!-- code mirror related -->
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/codemirror/4.8.0/codemirror.css">
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/codemirror/4.8.0/theme/solarized.css">
+<script src="//cdnjs.cloudflare.com/ajax/libs/codemirror/4.8.0/codemirror.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/codemirror/4.8.0/mode/javascript/javascript.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/codemirror/4.8.0/addon/selection/active-line.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/codemirror/4.8.0/addon/edit/matchbrackets.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/codemirror/4.8.0/mode/clike/clike.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/codemirror/4.8.0/addon/selection/active-line.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/codemirror/4.8.0/addon/edit/matchbrackets.js"></script>
+
+<script src={% static "js/editorsettings.js" %}></script>
+
+<!-- file input -->
+<script src="http://gregpike.net/demos/bootstrap-file-input/bootstrap.file-input.js"></script>
+
+<form class="form-horizontal" action="" method="post">
+  {% csrf_token %}
+  {{ form.non_field_errors }}
+  {% for field in form %}
+  <div class="form-group">
+    <div class='row'>
+      <div class='col-md-2'>
+        <label class="control-label">{{ field.label }}</label>
+      </div>
+      <div class='col-md-10'>
+        {{ field }}
+      </div>
+    </div>
+    {% if field.errors %}
+    <ol>
+      {% for error in field.errors %}
+      <li class='col-md-offset-3'><strong style="color:red">{{ error|escape }}</strong></li>
+      {% endfor %}
+    </ol>
+    {% endif %}
+  </div>
+  {% endfor %}
+  <div class="modal-footer row">
+    <div id='msg' class='col-md-8'>{{ message }}</div>
+    <div class='col-md-2'>
+      <input type="file" data-filename-placement="inside" id="fileinput">
+    </div>
+    <div class='col-md-2'>
+      <button type="submit" class="btn btn-primary">Submit</button>
+    </div>
+  </div>
+</form>

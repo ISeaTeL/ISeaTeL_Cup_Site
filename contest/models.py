@@ -1,21 +1,43 @@
+# -*- coding: utf-8 -*-
+
 from django.db import models
+from django.forms import ModelForm
+from django import forms
+
 from datetime import datetime
 # Create your models here.
 
 class Clarification(models.Model):
     cid = models.IntegerField()
-    asker = models.TextField(default='Anonymous')
+    asker = models.TextField()
     question = models.TextField()
-    reply = models.TextField(default='No reply yet.')
+    reply = models.TextField()
     time = models.DateTimeField(default=datetime.now(), editable=True, auto_now_add=True)
     def __unicode__(self):
         return 'question: ' + self.question + ' | reply: ' + self.reply + ' @' + str(self.time.date())
 
+class ClarificationForm(ModelForm):
+    class Meta:
+        model = Clarification
+        fields = ['asker', 'question']
+
+    asker = forms.CharField(label='Name', max_length=100, required=False,
+        widget=forms.TextInput(
+            attrs={'class': 'form-control', 
+            'placeholder': 'Anonymous'}))
+    
+    question = forms.CharField(label='Message', max_length=1000,
+        widget=forms.Textarea(
+            attrs={'class': 'form-control', 'rows': 3,
+            'placeholder': '你的疑問'}))
+    form_name = forms.CharField(label='', initial='ClarificationForm',
+        widget=forms.HiddenInput())
+
 class Contest(models.Model):
     cid = models.IntegerField(unique=True)
     problem_url = models.TextField()
-    solution_url = models.TextField()
     scoreboard_url = models.TextField()
+    solution_url = models.TextField()
     signup_url = models.TextField()
     date = models.TextField()
     title = models.TextField()
@@ -37,5 +59,184 @@ class SignUp(models.Model):
     time = models.DateTimeField(default=datetime.now(), editable=True, auto_now_add=True)
     cid = models.IntegerField()
     def __unicode__(self):
-        return 'nthu_oj_id: ' + str(self.nthu_oj_id) + '| time: ' + str(self.time)
+        return 'oj_id: ' + str(self.nthu_oj_id) + '| time: ' + str(self.time)
 
+class SignUpForm(ModelForm):
+    class Meta:
+        model = SignUp
+        fields = ['nthu_oj_id', 'name', 'email', 'message']
+    nthu_oj_id = forms.CharField(label='NTHU OJ ID', max_length=100,
+        widget=forms.TextInput(
+            attrs={'class': 'form-control', 
+            'placeholder': 'NTHU OJ ID'}))
+    name = forms.CharField(label='Name', max_length=100, required=False,
+        widget=forms.TextInput(
+            attrs={'class': 'form-control', 
+            'placeholder': '你的暱稱，也可以留空'}))
+    email = forms.EmailField(label='E-mail', max_length=100,
+        widget=forms.TextInput(
+            attrs={'class': 'form-control', 
+            'placeholder': '請留下常用的信箱，讓我們能聯絡到你！'}))
+    message = forms.CharField(label='Message', max_length=100, required=False,
+        widget=forms.Textarea(
+            attrs={'class': 'form-control', 'rows': 3,
+            'placeholder': '其他想說的東西\n一些雜七雜八的東西都可以說'}))
+    form_name = forms.CharField(label='', initial='SignUpForm',
+        widget=forms.HiddenInput())
+
+# Dictionary Helper Models
+
+class Dictionary(models.Model):
+    """A model that represents a dictionary. This model implements most of the dictionary interface,
+    allowing it to be used like a python dictionary.
+
+    """
+    name = models.CharField(max_length=255)
+
+    @staticmethod
+    def getDict(name):
+        """Get the Dictionary of the given name.
+
+        """
+        df = Dictionary.objects.select_related().get(name=name)
+
+        return df
+
+    def __getitem__(self, key):
+        """Returns the value of the selected key.
+
+        """
+        return self.keyvaluepair_set.get(key=key).value
+
+    def __setitem__(self, key, value):
+        """Sets the value of the given key in the Dictionary.
+
+        """
+        try:
+            kvp = self.keyvaluepair_set.get(key=key)
+
+        except KeyValuePair.DoesNotExist:
+            KeyValuePair.objects.create(container=self, key=key, value=value)
+
+        else:
+            kvp.value = value
+            kvp.save()
+
+    def __delitem__(self, key):
+        """Removed the given key from the Dictionary.
+
+        """
+        try:
+            kvp = self.keyvaluepair_set.get(key=key)
+
+        except KeyValuePair.DoesNotExist:
+            raise KeyError
+
+        else:
+            kvp.delete()
+
+    def __len__(self):
+        """Returns the length of this Dictionary.
+
+        """
+        return self.keyvaluepair_set.count()
+
+    def iterkeys(self):
+        """Returns an iterator for the keys of this Dictionary.
+
+        """
+        return iter(kvp.key for kvp in self.keyvaluepair_set.all())
+
+    def itervalues(self):
+        """Returns an iterator for the keys of this Dictionary.
+
+        """
+        return iter(kvp.value for kvp in self.keyvaluepair_set.all())
+
+    __iter__ = iterkeys
+
+    def iteritems(self):
+        """Returns an iterator over the tuples of this Dictionary.
+
+        """
+        return iter((kvp.key, kvp.value) for kvp in self.keyvaluepair_set.all())
+
+    def keys(self):
+        """Returns all keys in this Dictionary as a list.
+
+        """
+        return [kvp.key for kvp in self.keyvaluepair_set.all()]
+
+    def values(self):
+        """Returns all values in this Dictionary as a list.
+
+        """
+        return [kvp.value for kvp in self.keyvaluepair_set.all()]
+
+    def items(self):
+        """Get a list of tuples of key, value for the items in this Dictionary.
+        This is modeled after dict.items().
+
+        """
+        return [(kvp.key, kvp.value) for kvp in self.keyvaluepair_set.all()]
+
+    def get(self, key, default=None):
+        """Gets the given key from the Dictionary. If the key does not exist, it
+        returns default.
+
+        """
+        try:
+            return self[key]
+
+        except KeyError:
+            return default
+
+    def has_key(self, key):
+        """Returns true if the Dictionary has the given key, false if not.
+
+        """
+        return self.contains(key)
+
+    def contains(self, key):
+        """Returns true if the Dictionary has the given key, false if not.
+
+        """
+        try:
+            self.keyvaluepair_set.get(key=key)
+            return True
+
+        except KeyValuePair.DoesNotExist:
+            return False
+
+    def clear(self):
+        """Deletes all keys in the Dictionary.
+
+        """
+        self.keyvaluepair_set.all().delete()
+
+    def __unicode__(self):
+        """Returns a unicode representation of the Dictionary.
+
+        """
+        return unicode(self.asPyDict())
+
+    def asPyDict(self):
+        """Get a python dictionary that represents this Dictionary object.
+        This object is read-only.
+
+        """
+        fieldDict = dict()
+
+        for kvp in self.keyvaluepair_set.all():
+            fieldDict[kvp.key] = kvp.value
+
+        return fieldDict
+
+
+class KeyValuePair(models.Model):
+    """A Key-Value pair with a pointer to the Dictionary that owns it.
+
+    """
+    container = models.ForeignKey(Dictionary, db_index=True)
+    key = models.CharField(max_length=240, db_index=True)
+    value = models.CharField(max_length=65536, db_index=True)

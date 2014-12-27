@@ -84,6 +84,34 @@ class SignUpForm(ModelForm):
     form_name = forms.CharField(label='', initial='SignUpForm',
         widget=forms.HiddenInput())
 
+class Feedback(models.Model):
+    name = models.TextField()
+    email = models.TextField()
+    message = models.TextField()
+    time = models.DateTimeField(default=datetime.now(), editable=True, auto_now_add=True)
+    cid = models.IntegerField()
+    def __unicode__(self):
+        return 'cid ' + str(self.cid) + '| time: ' + str(self.time)
+
+class FeedbackForm(ModelForm):
+    class Meta:
+        model = Feedback
+        fields = ['name', 'email', 'message']
+    name = forms.CharField(label='Name', max_length=100, required=False,
+        widget=forms.TextInput(
+            attrs={'class': 'form-control', 
+            'placeholder': '您的稱號（預設是匿名）'}))
+    email = forms.EmailField(label='E-mail', max_length=100, required=False,
+        widget=forms.TextInput(
+            attrs={'class': 'form-control', 
+            'placeholder': '如果您希望我們回信，請留下常用的信箱'}))
+    message = forms.CharField(label='Message', max_length=500,
+        widget=forms.Textarea(
+            attrs={'class': 'form-control', 'rows': 3,
+            'placeholder': '請留下您對本場賽事的意見'}))
+    form_name = forms.CharField(label='', initial='FeedbackForm',
+        widget=forms.HiddenInput())
+
 # Dictionary Helper Models
 
 class Dictionary(models.Model):

@@ -3,6 +3,13 @@
 {% load static %}
 <!-- contest settings -->
 <script src={%static "js/contestsettings.js"%}></script>
+{% include 'popup_form.html' with title='Feedback' popup_id='feedback-popup' form=feedback_form %}
+<div class="alert alert-dismissable alert-warning">
+  <button type="button" class="close" data-dismiss="alert">×</button>
+  <h4><b>給我們回饋</b></h4>
+  <h5>本團隊都是舉辦比賽的新手，相信在比賽的過程中有許多可以改進的地方。
+    <br />不論是題目的品質、或是頁面的呈現，我們都希望能得到您的回饋，讓我們之後能變得更完善。<br />可以通過<a href="#feedback-popup" class="open-popup-link alert-link"><b>此表</b></a>來給我們回饋。</h5>
+</div>
 <div class="tabbable">
     <ul class="nav nav-tabs">
     <li class="active"><a id="p1" href="#pane1" data-toggle="tab">Bulletin</a></li>

@@ -32,6 +32,15 @@ def contest(request, contest_id):
                     return render(request, 'form.html', {'form': SignUpForm(), 'message': '您已成功傳送訊息'})
                 else:
                     return render(request, 'form.html', {'form': signupform})
+            if request.POST['form_name'] == 'FeedbackForm':
+                # create a form instance and populate it with data from the request:
+                feedbackform = FeedbackForm(request.POST, instance=Feedback(cid=contest_id))
+                # check whether it's valid:
+                if feedbackform.is_valid():
+                    feedbackform.save()
+                    return render(request, 'form.html', {'form': FeedbackForm(), 'message': '您已成功傳送訊息'})
+                else:
+                    return render(request, 'form.html', {'form': feedbackform})
             if request.POST['form_name'] == 'ClarificationForm':
                 clarificationform = ClarificationForm(request.POST, instance=Clarification(asker='', cid=contest_id, reply='No reply yet.'))
                 if clarificationform.is_valid():
@@ -44,6 +53,7 @@ def contest(request, contest_id):
                     return render(request, 'form.html', {'form': clarificationform})
 
         render_data['signup_form'] = SignUpForm()
+        render_data['feedback_form'] = FeedbackForm()
         render_data['clarification_form'] = ClarificationForm()
 
         render_data['problem_table'] = get_problem(contest_data)

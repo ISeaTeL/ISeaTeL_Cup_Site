@@ -2,7 +2,8 @@ from django.shortcuts import *
 from django.http import *
 from django import forms
 import random
-from judge import judge
+from oj_judge import problem_judge
+from oj_judge.models import *
 from problem.models import *
 from contest.crawler import *
 
@@ -43,8 +44,6 @@ def problem(request, problem_id):
     problem_data = Problem.objects.filter(pid=problem_id).first()
     render_data = {}
 
-
-
     if problem_data:
         render_data['problem'] = problem_data
 
@@ -54,18 +53,32 @@ def problem(request, problem_id):
             if submitform.is_valid():
                 code = submitform.cleaned_data['code']
                 lang = submitform.cleaned_data['language']
-                judge_result = 'GG'
+                sid = JudgeResult.objects.count()+1
                 try:
-                    judge_result = judge.run(random.randint(1,10000),
+                    judge_result = problem_judge.run(sid,
                         problem_data.pid,
                         code,lang,
                         problem_data.time_limit,
                         problem_data.mem_limit)
                     print judge_result
                 except:
+                    judge_result={
+                        'result': 'Judge Error',
+                        'status': 0,
+                        'time': 0,
+                        'memory': 0,
+                        'message': ''}
                     print 'judge GG'
+                judge_result['username'] = str(request.user.username)
                 render_data['message'] = str(judge_result)
-                return render(request, 'show_problem.html', render_data)
+
+                JudgeResult.objects.create(pid=problem_id, sid=sid, username=judge_result['username'],
+                    result=judge_result['result'], time=judge_result['time'], 
+                    memory=judge_result['memory'], status=judge_result['status'], 
+                    message=judge_result['message'], language=lang)
+                
+                return redirect('/problem/status')
+                #return render(request, 'show_problem.html', render_data)
             else:
                 return render(request, 'show_problem.html', render_data)
 
@@ -73,3 +86,7 @@ def problem(request, problem_id):
         return render(request, 'show_problem.html', render_data)
     else:
         return HttpResponseNotFound(PAGE_NOT_FOUND)
+
+def status(request):
+    results = JudgeResult.objects.order_by('-submit_time')
+    return render(request, 'status.html', {'results': results})

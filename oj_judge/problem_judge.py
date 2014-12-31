@@ -3,16 +3,19 @@ import shlex,subprocess,os,time
 import filecmp
 import shutil
 import random
+
+from oj_judge.models import *
+
 def run(sid,pid,source,lang,timelimit,memlimit):
 	judge_result={
-		'result': '',
+		'result': 'Judge Error',
 		'status': 0,
 		'time': 0,
 		'memory': 0,
 		'message': ''
 		}
 
-	run_dir='/home/ISeaTeL/ISeaTeL_Cup_Site/judge/run/%d' % sid
+	run_dir='/home/ISeaTeL/ISeaTeL_Cup_Site/oj_judge/run/%d' % sid
 	prob_dir='../../../media/problem/%d' % pid
 	print run_dir, prob_dir
 	

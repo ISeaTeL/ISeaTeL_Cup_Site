@@ -1,6 +1,6 @@
-{%extends "base.html"%}
+{% extends "base.html" %}
 {% load static %}
-{%block body_block%}
+{% block body_block %}
 <center><h3>{{ problem.pid }} - {{ problem.title }}</h3></center>
 {% load markdown_deux_tags %}
 
@@ -9,8 +9,11 @@
 		{{ problem.content|markdown }}
 	</div>
 </div>
+{% if user.is_authenticated %}
+	{% include "judge.html" %}
+{% else %}
+	Please <a href="/users/login"><b>login</b></a> to submit.
+{% endif %}
 
-{% include "judge.html" %}
-
-{%endblock body_block%}
+{% endblock body_block %}
 

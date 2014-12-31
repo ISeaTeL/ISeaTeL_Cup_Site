@@ -42,7 +42,7 @@ int main() {
 		if submitform.is_valid():
 			code = submitform.cleaned_data['code']
 			lang = submitform.cleaned_data['language']
-			judge_result = 'fuck'
+			judge_result = 'GG'
 			try:
 				judge_result = problem_judge.run(random.randint(1,10000),1,code,lang,1000,32000)
 				print judge_result

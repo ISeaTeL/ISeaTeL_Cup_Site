@@ -59,7 +59,7 @@ INSTALLED_APPS = (
     'index',
     'contest',
     'forms',
-    'judge',
+    'oj_judge',
     'problem',
     'users',
 )

@@ -13,6 +13,6 @@ urlpatterns = patterns('',
 
     url(r'^problem/', include('problem.urls')),
     url(r'^contest/', include('contest.urls')),
-    url(r'^judge/', include('judge.urls')),
+    url(r'^judge/', include('oj_judge.urls')),
     url(r'^users/', include('users.urls')),
 )

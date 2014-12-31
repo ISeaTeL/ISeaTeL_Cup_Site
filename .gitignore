@@ -2,6 +2,7 @@
 password.py
 # Judge
 run/
+media/problem/
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

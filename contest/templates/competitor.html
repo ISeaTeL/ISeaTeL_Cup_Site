@@ -24,4 +24,10 @@
     </tbody>
   </table>
 </div>
+<p>
+  Mail list: 
+  {% for people in competitor %}
+    {{ people.email }},
+  {% endfor %}
+</p>
 {%endblock body_block%}

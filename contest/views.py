@@ -2,64 +2,61 @@
 from django.shortcuts import render
 from django.http import *
 
+from contest.forms import *
 from contest.models import *
 from contest.crawler import *
 from contest.email_reply import *
 
 import json
 
+def feedback(request, contest_id):
+    feedbackform = FeedbackForm(request.POST, instance=Feedback(cid=contest_id))
+    if feedbackform.is_valid():
+        feedbackform.save()
+        return render(request, 'form.html', {'form': FeedbackForm(), 'message': '您已成功傳送訊息'})
+    else:
+        return render(request, 'form.html', {'form': feedbackform})
+
+def signup(request, contest_id):
+    signupform = SignUpForm(request.POST, instance=SignUp(cid=contest_id))
+    if signupform.is_valid():
+        signupform.save()
+        signup_reply(contest_data, request)
+        return render(request, 'form.html', {'form': SignUpForm(), 'message': '您已成功傳送訊息'})
+    else:
+        return render(request, 'form.html', {'form': signupform})
+
+def clarification(request, contest_id):
+    contest_data = Contest.objects.filter(cid=contest_id).first()
+    clarificationform = ClarificationForm(request.POST, instance=Clarification(asker='', cid=contest_id, reply='No reply yet.'))
+    if clarificationform.is_valid() and contest_data:
+        clar = clarificationform.save(commit=False)
+        clar.asker = 'Anonymous' if clar.asker == '' else clar.asker
+        clar.save()
+        clarification_reply(contest_data, request)
+        return render(request, 'form.html', {'form': ClarificationForm(), 'message': '您已成功傳送訊息'})
+    else:
+        return render(request, 'form.html', {'form': clarificationform})
+
 def contest(request, contest_id):    
     contest_data = Contest.objects.filter(cid=contest_id).first()
     render_data = {}
 
     if contest_data:
-        if request.is_ajax() and 'email' not in request.POST and 'asker' not in request.POST:
+        if request.is_ajax():
             data = {
                 'scoreboard_table': str(get_scoreboard(contest_data)),
                 'clarification_table': str(get_clarification(contest_data))
             }
             return HttpResponse(json.dumps(data))
 
-        if request.method == 'POST' and 'form_name' in request.POST:
-            if request.POST['form_name'] == 'SignUpForm':
-                # create a form instance and populate it with data from the request:
-                signupform = SignUpForm(request.POST, instance=SignUp(cid=contest_id))
-                # check whether it's valid:
-                if signupform.is_valid():
-                    signupform.save()
-                    signup_reply(contest_data, request)
-
-                    return render(request, 'form.html', {'form': SignUpForm(), 'message': '您已成功傳送訊息'})
-                else:
-                    return render(request, 'form.html', {'form': signupform})
-            if request.POST['form_name'] == 'FeedbackForm':
-                # create a form instance and populate it with data from the request:
-                feedbackform = FeedbackForm(request.POST, instance=Feedback(cid=contest_id))
-                # check whether it's valid:
-                if feedbackform.is_valid():
-                    feedbackform.save()
-                    return render(request, 'form.html', {'form': FeedbackForm(), 'message': '您已成功傳送訊息'})
-                else:
-                    return render(request, 'form.html', {'form': feedbackform})
-            if request.POST['form_name'] == 'ClarificationForm':
-                clarificationform = ClarificationForm(request.POST, instance=Clarification(asker='', cid=contest_id, reply='No reply yet.'))
-                if clarificationform.is_valid():
-                    clar = clarificationform.save(commit=False)
-                    clar.asker = 'Anonymous' if clar.asker == '' else clar.asker
-                    clar.save()
-                    clarification_reply(contest_data, request)
-                    return render(request, 'form.html', {'form': ClarificationForm(), 'message': '您已成功傳送訊息'})
-                else:
-                    return render(request, 'form.html', {'form': clarificationform})
-
         render_data['signup_form'] = SignUpForm()
         render_data['feedback_form'] = FeedbackForm()
         render_data['clarification_form'] = ClarificationForm()
 
         render_data['problem_table'] = get_problem(contest_data)
-        render_data['head_title'] = contest_data.title
-        render_data['head_content'] = contest_data.content
-        render_data['head_status'] = get_status(contest_data)
+        render_data['contest_data'] = contest_data
+        
         return render(request, 'contest.html', render_data)
 
     else:

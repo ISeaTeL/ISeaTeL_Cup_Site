@@ -2,7 +2,7 @@ from django.shortcuts import render
 #from judge.models import *
 
 from django import forms
-import judge
+import problem_judge
 import random
 # Create your models here.
 CHOICES=(('select1','select 1'), ('select2','select 2'),)
@@ -44,7 +44,7 @@ int main() {
 			lang = submitform.cleaned_data['language']
 			judge_result = 'fuck'
 			try:
-				judge_result = judge.run(random.randint(1,10000),1,code,lang,1000,32000)
+				judge_result = problem_judge.run(random.randint(1,10000),1,code,lang,1000,32000)
 				print judge_result
 			except Exception as e:
 				print 'judge GG'

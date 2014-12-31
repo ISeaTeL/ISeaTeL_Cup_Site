@@ -22,7 +22,7 @@ STATIC_URL = '/static/'
 SECRET_KEY = 'p%$%@0x3f*mt^crlor_2r3vujh2&!4%e^cc3wbw+6=dqm&pt3x'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 TEMPLATE_DEBUG = False
 
@@ -49,6 +49,7 @@ INSTALLED_APPS = (
     'grappelli',
     'pagedown',
     'markdown_deux',
+    'crispy_forms',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -60,6 +61,7 @@ INSTALLED_APPS = (
     'forms',
     'judge',
     'problem',
+    'users',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -68,7 +70,7 @@ MIDDLEWARE_CLASSES = (
     'django.middleware.common.BrokenLinkEmailsMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
-#    'django.contrib.auth.middleware.SessionAuthenticationMiddleware',
+    'django.contrib.auth.middleware.SessionAuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 )
@@ -107,3 +109,7 @@ USE_TZ = True
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 MEDIA_URL = '/media/'
 STATIC_URL = '/static/'
+
+
+
+CRISPY_TEMPLATE_PACK = 'bootstrap3'

@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 from django.shortcuts import render_to_response
 
-
 from contest.models import *
 
 from bs4 import BeautifulSoup
@@ -17,7 +16,17 @@ PAGE_NOT_FOUND = '<div style="height:50%"></div><center><h1>QAQ<br>What have you
 reload(sys)
 sys.setdefaultencoding('utf-8')
 
-def fetch_table(url):
+def url2table(url):
+    m = Dictionary.getDict('url2table')
+    if url in m.keys():
+        return m[url]
+    else:
+        return 'ＯＪ 炸裂了'    
+
+def fetch_table(url, contest_data):
+    if contest_data.status == 'ended':
+        return url2table(url)
+
     try:
         response = urllib2.urlopen(url, timeout=1)
         html = response.read()
@@ -26,19 +35,14 @@ def fetch_table(url):
         Dictionary.getDict('url2table')[url] = table
         return table
     except:
-        m = Dictionary.getDict('url2table')
-        if url in m.keys():
-            return m[url]
-        else:
-            return 'ＯＪ 炸裂了'
-
+        return url2table(url)
 
 def get_scoreboard(contest_data):
     if(contest_data.status=='incoming'):
         return INCOMING_HTML
 
     url = contest_data.scoreboard_url
-    html = fetch_table(url)
+    html = fetch_table(url, contest_data)
     html = re.sub('AContestant', random.choice(['CKL', 'Chuck Lee', 'AContestant']), html)
     html = re.sub('<td>', '<td class="text-center">', html)
     html = re.sub('<th>', '<th class="text-center">', html)
@@ -62,7 +66,7 @@ def get_problem(contest_data):
         return INCOMING_HTML
 
     url = contest_data.problem_url
-    html = fetch_table(url)
+    html = fetch_table(url, contest_data)
     soup = BeautifulSoup(html)
     for a in soup.find_all('a'):
         a['href'] = 'http://140.114.86.238/' + a['href']
@@ -75,10 +79,3 @@ def get_problem(contest_data):
             else:
                 tr.append(BeautifulSoup('<th>Solution</th>'))
     return str(soup)
-
-def get_status(contest_data):
-    status = contest_data.status
-    if status=='ended' or status=='running':
-        return '<a class="btn btn-primary btn-lg" onclick="'+ "$('#p3').click()" + '" data-toggle="tab">'+status+'</a>'
-    else:
-        return '<a href="#signup-popup" class="open-popup-link btn btn-primary btn-lg">Sign Up!!</a>'

@@ -1,9 +1,14 @@
-{%extends "base.html"%}
-{%block body_block%}
+{% extends "base.html" %}
+
+{% block body_block %}
 {% load static %}
 <!-- contest settings -->
 <script src={%static "js/contestsettings.js"%}></script>
-{% include 'popup_form.html' with title='Feedback' popup_id='feedback-popup' form=feedback_form %}
+<!-- poppups -->
+{% include "popup_form.html" with title="Feedback" popup_id="feedback-popup" form=feedback_form to="feedback" %}
+{% include "popup_form.html" with title="Sign Up" popup_id="signup-popup" form=signup_form to="signup" %}
+{% include "popup_form.html" with title="Clarification" popup_id="clarification-popup" form=clarification_form to="clarification" %}
+
 <div class="alert alert-dismissable alert-warning">
   <button type="button" class="close" data-dismiss="alert">×</button>
   <h4><b>給我們回饋</b></h4>
@@ -11,25 +16,69 @@
     <br />不論是題目的品質、或是頁面的呈現，我們都希望能得到您的回饋，讓我們之後能變得更完善。<br />可以通過<a href="#feedback-popup" class="open-popup-link alert-link"><b>此表</b></a>來給我們回饋。</h5>
 </div>
 <div class="tabbable">
-    <ul class="nav nav-tabs">
+  <ul class="nav nav-tabs">
     <li class="active"><a id="p1" href="#pane1" data-toggle="tab">Bulletin</a></li>
     <li><a id="p2" href="#pane2" data-toggle="tab">Problems</a></li>
     <li><a id="p3" href="#pane3" data-toggle="tab">Scoreboard</a></li>
     <li><a id="p4" href="#pane4" data-toggle="tab">Clarification</a></li>
   </ul>
   <div class="tab-content">
+    <!-- bulletin -->
     <div id="pane1" class="tab-pane active">
-      {%include 'head.html'%}
+      <div class="jumbotron">
+        <h3>{{ contest_data.title|safe }}</h3>
+        <p>{{ contest_data.content|safe|linebreaks }}</p>
+        <h4>Status: 
+          {% if contest_data.status == "incoming" %}
+            <a href="#signup-popup" class="open-popup-link btn btn-primary btn-lg">Sign Up!!</a>
+          {% else %}
+            <a class="btn btn-primary btn-lg" onclick="$('#p3').click()" data-toggle="tab">{{ contest_data.status }}</a>
+          {% endif %}
+        </h4>
+      </div>
     </div>
     <div id="pane2" class="tab-pane">
-      {%include 'problem.html'%}
+      <!-- problems -->
+      <div class="panel panel-primary">
+        <div class="panel-heading">
+          <div class="row">
+            <div class="col-md-4">
+              <h3 class="panel-title">Problems</h3>
+            </div>
+          </div>
+        </div>
+        {{ problem_table|safe }}
+      </div>
     </div>
     <div id="pane3" class="tab-pane">
-      {%include 'scoreboard.html'%}
+      <div class="panel panel-primary">
+        <div class="panel-heading">
+          <div class="row">
+            <div class="col-md-4">
+              <h3 class="panel-title">Scoreboard</h3>
+            </div>
+          </div>
+        </div>
+        <div id="scoreboard_table"></div>
+      </div>
     </div>
     <div id="pane4" class="tab-pane">
-      {%include 'clarification.html'%}
+      <!-- scoreboard -->
+      <div class="panel panel-primary">
+        <div class="panel-heading">
+          <div class="row">
+            <div class="col-md-4">
+              <h3 class="panel-title">Clarification</h3>
+            </div>
+            <div class="col-md-offset-7 col-md-1">
+              <a href="#clarification-popup" class="open-popup-link  btn btn-danger" style="float:right">Send Clarification</a>
+            </div>
+          </div>
+        </div>
+        <div id="clarification_table"></div>
+      </div>
+
     </div>
-  </div><!-- /.tab-content -->
-</div><!-- /.tabbable -->
-{%endblock body_block%}
+  </div>
+</div>
+{% endblock body_block %}

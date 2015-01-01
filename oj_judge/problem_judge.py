@@ -4,11 +4,9 @@ import filecmp
 import shutil
 import random
 
-from oj_judge.models import *
-
 def run(sid,pid,source,lang,timelimit,memlimit):
 	judge_result={
-		'result': 'Judge Error',
+		'result': 'CE',
 		'status': 0,
 		'time': 0,
 		'memory': 0,
@@ -49,8 +47,8 @@ def run(sid,pid,source,lang,timelimit,memlimit):
 		e=file('err','r')
 		judge_result['message']=e.read()
 		return judge_result
-	cmd['GCC']='../antiskill -i %s/in -o out -t %d -m %d Main' % (prob_dir, timelimit, memlimit)
-	cmd['G++']='../antiskill -i %s/in -o out -t %d -m %d Main' % (prob_dir, timelimit, memlimit)
+	cmd['GCC']='sudo ../antiskill -i %s/in -o out -t %d -m %d Main' % (prob_dir, timelimit, memlimit)
+	cmd['G++']='sudo ../antiskill -i %s/in -o out -t %d -m %d Main' % (prob_dir, timelimit, memlimit)
 	
 	print cmd[lang]
 	
@@ -70,8 +68,9 @@ def run(sid,pid,source,lang,timelimit,memlimit):
 					'result': result,
 					'status': status,
 					'time': time_usage,
-					'memory': mem_usage
-				}
+					'memory': mem_usage,
+				    'message': 'OK'
+                }
 
 			if(result == 'OK'):
 				out='out'

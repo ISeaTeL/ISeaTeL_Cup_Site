@@ -1,1 +1,4 @@
-int main(){}
+#include<cstdio>
+int main(){
+    printf("gg");
+}

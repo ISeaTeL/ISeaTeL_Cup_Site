@@ -47,8 +47,8 @@ def run(sid,pid,source,lang,timelimit,memlimit):
 		e=file('err','r')
 		judge_result['message']=e.read()
 		return judge_result
-	cmd['GCC']='sudo ../antiskill -i %s/in -o out -t %d -m %d Main' % (prob_dir, timelimit, memlimit)
-	cmd['G++']='sudo ../antiskill -i %s/in -o out -t %d -m %d Main' % (prob_dir, timelimit, memlimit)
+	cmd['GCC']='../antiskill -i %s/in -o out -t %d -m %d Main' % (prob_dir, timelimit, memlimit)
+	cmd['G++']='../antiskill -i %s/in -o out -t %d -m %d Main' % (prob_dir, timelimit, memlimit)
 	
 	print cmd[lang]
 	

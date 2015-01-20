@@ -2,114 +2,137 @@
 <html>
 
 <head>
-  <meta http-equiv="content-type" content="text/html; charset=utf-8" />
-  <title>Sudo</title>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+    <title>Sudo</title>
 
-  <!-- Latest compiled and minified JavaScript -->
-  <script src="https://code.jquery.com/jquery-2.1.3.min.js"></script>
+    <!-- Latest compiled and minified JavaScript -->
+    <script src="https://code.jquery.com/jquery-2.1.3.min.js"></script>
 
-  <!-- Latest compiled and minified CSS -->
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
 
-  <!-- Optional theme -->
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap-theme.min.css">
+    <!-- Optional theme -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap-theme.min.css">
 
-  <!-- Latest compiled and minified JavaScript -->
-  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
+    <!-- Latest compiled and minified JavaScript -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
 
-  <script type="text/javascript" charset="utf-8">
-  $(function() {
-    var busy = '<center><span class="glyphicon glyphicon-remove" aria-hidden="true"></span></center>';
-    var free = '<center><span class="glyphicon glyphicon-ok" aria-hidden="true"></span></center>';
-    var content = '<table class="table table-bordered table-hover">';
-    var ct = 1;
-    var sta = [];
-    var ss = ['1', '2', '3', '4', 'n', '5', '6', '7', '8', '9', 'a', 'b', 'c'];
-    var week = ['禮拜一', '禮拜二', '禮拜三', '禮拜四', '禮拜五', '禮拜六', '禮拜天'];
-    content += '<tr><th></th>';
-    for (var i = 0; i < 7; i++) {
-      content += '<th><center>' + week[i] + '</center></th>';
-    }
-    content += '</tr>';
-    var dbsta = $('#schedule').val();
-    for (var i = 1; i < 92; i++) {
-      sta[i] = dbsta[i - 1];
-    }
-    for (var i = 1; i <= 13; i++) {
-      content += '<tr>';
-      content += '<td><center>' + ss[i - 1] + '</center></td>';
-      for (var j = 1; j <= 7; j++) {
-        content += ('<td class="time" id=' + ct + '>');
-        if (sta[ct] == '0')
-          content += free;
-        else
-          content += busy;
-        content += '</td>';
-        ct++;
-      }
-      content += '</tr>';
-    }
-    content += '</table>';
-    console.log(content);
-    $("#timetable").html(content);
-    $(".time").click(function() {
-      console.log($(this).attr('id'));
-      target = $(this).attr('id');
-      if (sta[target] == '0') {
-        sta[target] = '1';
-        target = "#" + target;
-        $(target).html(busy);
-      } else {
-        sta[target] = '0';
-        target = "#" + target;
-        $(target).html(free);
-      }
-      var outSta = "";
-      for (var i = 1; i <= 13 * 7; i++) {
-        outSta += sta[i];
-      }
-      $('#schedule').val(outSta);
-    });
-    $('#done').click(function() {
-      var pstr = $('#rawData').val();
-      var queK1 = ['M', 'T', 'W', 'R', 'F', 'S'];
-      for (var i = 0; i < 6; i++) {
-        for (var j = 0; j < 13; j++) {
-          key = queK1[i] + ss[j];
-          ind = pstr.search(key);
-          console.log(key);
-          if (ind != -1) {
-            sta[j * 7 + i + 1] = '1';
-          } else {
-            sta[j * 7 + i + 1] = '0';
-          }
-          target = j*7+i+1;
-          if (sta[target] == '0') {
-            target = "#" + target;
-            $(target).html(free);
-          } else {
-            target = "#" + target;
-            $(target).html(busy);
-          }
+    <script type="text/javascript" charset="utf-8">
+    $(function() {
+        var busy = '<center><span class="glyphicon glyphicon-remove" aria-hidden="true"></span></center>';
+        //var free = '<center><span class="glyphicon glyphicon-ok" aria-hidden="true"></span></center>';
+        var free = '';
+        var content = '<table class="table table-bordered table-hover">';
+        var ct = 1;
+        var sta = [];
+        var ss = [
+            '1 (08:00-08:50)',
+            '2 (09:00-09:50)',
+            '3 (10:10-11:00)',
+            '4 (11:10-12:00)',
+            'n (12:10-13:00)',
+            '5 (13:20-14:10)',
+            '6 (14:20-15:10)',
+            '7 (15:30-16:20)',
+            '8 (16:30-17:20)',
+            '9 (17:30-18:20)',
+            'a (18:30-19:20)',
+            'b (19:30-20:20)',
+            'c (20:30-21:20)'
+        ];
+        var week = ['禮拜一', '禮拜二', '禮拜三', '禮拜四', '禮拜五', '禮拜六', '禮拜天'];
+        content += '<tr><th></th>';
+        for (var i = 0; i < 7; i++) {
+            content += '<th><center>' + week[i] + '</center></th>';
         }
-      }
+        content += '</tr>';
+        var dbsta = $('#schedule').val();
+        for (var i = 1; i < 92; i++) {
+            sta[i] = dbsta[i - 1];
+        }
+        for (var i = 1; i <= 13; i++) {
+            content += '<tr>';
+            content += '<td><center>' + ss[i - 1] + '</center></td>';
+            for (var j = 1; j <= 7; j++) {
+                content += ('<td class="time" id=' + ct + '>');
+                if (sta[ct] == '0')
+                    content += free;
+                else
+                    content += busy;
+                content += '</td>';
+                ct++;
+            }
+            content += '</tr>';
+        }
+        content += '</table>';
 
-      var outSta = "";
-      for (var i = 1; i <= 13 * 7; i++) {
-        outSta += sta[i];
-      }
-      $('#schedule').val(outSta);
+        function update() {
+            var outSta = "";
+            for (var i = 1; i <= 13 * 7; i++) {
+                outSta += sta[i];
+            }
+            $('#schedule').val(outSta);
+        }
+        $("#timetable").html(content);
+        $(".time").click(function() {
+            target = $(this).attr('id');
+            if (sta[target] == '0') {
+                sta[target] = '1';
+                target = "#" + target;
+                $(target).html(busy);
+            } else {
+                sta[target] = '0';
+                target = "#" + target;
+                $(target).html(free);
+            }
+            update();
+        });
+        $('#done').click(function() {
+            var pstr = $('#rawData').val();
+            var queK1 = ['M', 'T', 'W', 'R', 'F', 'S'];
+            var queK2 = ['1', '2', '3', '4', 'n', '5', '6', '7', '8', '9', 'a', 'b', 'c'];
+            for (var i = 0; i < 6; i++) {
+                for (var j = 0; j < 13; j++) {
+                    key = queK1[i] + queK2[j];
+                    ind = pstr.search(key);
+                    if (ind != -1) {
+                        sta[j * 7 + i + 1] = '1';
+                    } else {
+                        sta[j * 7 + i + 1] = '0';
+                    }
+                    target = j * 7 + i + 1;
+                    if (sta[target] == '0') {
+                        target = "#" + target;
+                        $(target).html(free);
+                    } else {
+                        target = "#" + target;
+                        $(target).html(busy);
+                    }
+                }
+            }
+            update();
+        });
     });
-  });
-  </script>
+    </script>
 </head>
 
 <body class="container col-lg-offset-1 col-lg-10">
-  {% include "normal_form.html" with title="調查" form=sudoform to="" %} {{ msg }}
-  <textarea class="form-control" id="rawData" value="Pusheen meow~"></textarea>
-  <button class="btn btn-primary" id="done">Sent Table!</button>
-  <div id="timetable">
-  </div>
+    <h1>Sudo - 調查大家空閒的時間</h1> {% include "normal_form.html" with title="調查" form=sudoform to="" %} {{ msg }}
+    <hr>
+    <div class="alert alert-dismissable alert-warning">
+        <button type="button" class="close" data-dismiss="alert">×</button>
+        <h4>使用方式</h4>
+        <p>你可以直接點擊課表來改變狀態；或是使用 Pusheen autogen 幫你把課表輸入到下面來～</p>
+    </div>
+    <div class="row">
+        <div class="col-lg-11">
+            <textarea class="form-control" id="rawData" placeholder="把選課結果貼到這裏（有M1M2的那種表格），Pusheen就會自動幫你填喔～"></textarea>
+        </div>
+        <button class="btn btn-primary col-lg-1" id="done">Meow!</button>
+    </div>
+    <hr>
+    <div id="timetable">
+    </div>
 </body>
 
 </html>

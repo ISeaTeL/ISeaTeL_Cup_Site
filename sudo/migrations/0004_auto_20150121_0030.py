@@ -8,14 +8,14 @@ import datetime
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('oj_judge', '0020_auto_20150121_0003'),
+        ('sudo', '0003_auto_20150121_0028'),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='judgeresult',
-            name='submit_time',
-            field=models.DateTimeField(default=datetime.datetime(2015, 1, 21, 0, 12, 13, 385742), auto_now_add=True),
+            model_name='sudo',
+            name='time',
+            field=models.DateTimeField(default=datetime.datetime(2015, 1, 21, 0, 30, 34, 359236), auto_now_add=True),
             preserve_default=True,
         ),
     ]

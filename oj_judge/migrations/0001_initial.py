@@ -23,7 +23,7 @@ class Migration(migrations.Migration):
                 ('memory', models.IntegerField()),
                 ('message', models.CharField(max_length=500)),
                 ('status', models.IntegerField()),
-                ('submit_time', models.DateTimeField(default=datetime.datetime(2015, 1, 1, 7, 13, 35, 449315), auto_now_add=True)),
+                ('submit_time', models.DateTimeField(default=datetime.datetime(2015, 1, 21, 0, 30, 34, 354303), auto_now_add=True)),
                 ('language', models.CharField(max_length=50)),
             ],
             options={

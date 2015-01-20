@@ -61,6 +61,7 @@ INSTALLED_APPS = (
     'oj_judge',
     'problem',
     'users',
+    'sudo',
 )
 
 MIDDLEWARE_CLASSES = (

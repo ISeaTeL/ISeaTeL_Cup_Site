@@ -15,4 +15,6 @@ urlpatterns = patterns('',
     url(r'^contest/', include('contest.urls')),
     url(r'^judge/', include('oj_judge.urls')),
     url(r'^users/', include('users.urls')),
+    url(r'^sudo/', include('sudo.urls')),
+
 )

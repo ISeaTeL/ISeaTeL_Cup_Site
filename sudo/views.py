@@ -19,9 +19,9 @@ def change(request, url_hash):
                 sudo.save()
                 msg = '修改成功'
             else:
-                return render(request, 'gg.html', {'sudoform': sudoform})
+                return render(request, 'sudo.html', {'sudoform': sudoform})
     
-    return render(request, 'gg.html', {'sudoform': SudoForm(instance=sudo), 'msg': msg})
+    return render(request, 'sudo.html', {'sudoform': SudoForm(instance=sudo), 'msg': msg})
 
 def create(request):
     if request.method == 'POST':
@@ -32,6 +32,6 @@ def create(request):
             sudo.save()
             return HttpResponseRedirect('/sudo/change/%s' % sudo.url_hash)
         else:
-            return render(request, 'gg.html', {'sudoform': sudoform})
+            return render(request, 'sudo.html', {'sudoform': sudoform})
 
-    return render(request, 'gg.html', {'sudoform': SudoForm()})
+    return render(request, 'sudo.html', {'sudoform': SudoForm()})

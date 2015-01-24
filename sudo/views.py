@@ -8,12 +8,13 @@ from sudo.models import *
 
 import hashlib
 # Create your views here.
-def change(request, url_hash):
+def change(request, url_hash, g):
     sudo = get_object_or_404(Sudo, url_hash=url_hash)
     msg = '欲修改資料者可用此url修改'
+    F = SudoForm if g == '' else SpecialSudoForm
     if sudo:
         if request.method == 'POST':
-            sudoform = SudoForm(request.POST, instance=sudo)
+            sudoform = F(request.POST, instance=sudo)
             if sudoform.is_valid():
                 sudo = sudoform.save()
                 sudo.save()
@@ -21,11 +22,12 @@ def change(request, url_hash):
             else:
                 return render(request, 'sudo.html', {'sudoform': sudoform})
     
-    return render(request, 'sudo.html', {'sudoform': SudoForm(instance=sudo), 'msg': msg})
+    return render(request, 'sudo.html', {'sudoform': F(instance=sudo), 'msg': msg})
 
-def create(request):
+def create(request, g):
+    F = SudoForm if g == '' else SpecialSudoForm
     if request.method == 'POST':
-        sudoform = SudoForm(request.POST)
+        sudoform = F(request.POST)
         if sudoform.is_valid():
             sudo = sudoform.save()
             sudo.url_hash = hashlib.md5(sudo.email).hexdigest()
@@ -34,32 +36,4 @@ def create(request):
         else:
             return render(request, 'sudo.html', {'sudoform': sudoform})
 
-    return render(request, 'sudo.html', {'sudoform': SudoForm()})
-
-def special_change(request, url_hash):
-    sudo = get_object_or_404(Sudo, url_hash=url_hash)
-    msg = '欲修改資料者可用此url修改'
-    if sudo:
-        if request.method == 'POST':
-            sudoform = SpecialSudoForm(request.POST, instance=sudo)
-            if sudoform.is_valid():
-                sudo = sudoform.save()
-                sudo.save()
-                msg = '修改成功'
-            else:
-                return render(request, 'sudo.html', {'sudoform': sudoform})
-    
-    return render(request, 'sudo.html', {'sudoform': SpecialSudoForm(instance=sudo), 'msg': msg})
-
-def special_create(request):
-    if request.method == 'POST':
-        sudoform = SpecialSudoForm(request.POST)
-        if sudoform.is_valid():
-            sudo = sudoform.save()
-            sudo.url_hash = hashlib.md5(sudo.email).hexdigest()
-            sudo.save()
-            return HttpResponseRedirect('/sudo/special_change/%s' % sudo.url_hash)
-        else:
-            return render(request, 'sudo.html', {'sudoform': sudoform})
-
-    return render(request, 'sudo.html', {'sudoform': SpecialSudoForm()})
+    return render(request, 'sudo.html', {'sudoform': F()})

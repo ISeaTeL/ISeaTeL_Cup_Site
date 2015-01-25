@@ -36,4 +36,3 @@ def clarification_reply(contest_data, request):
                 [email[1] for email in settings.ADMINS])).start()
     except:
         print 'send_email error'
-

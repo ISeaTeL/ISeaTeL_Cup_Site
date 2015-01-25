@@ -11,7 +11,6 @@ import re
 import sys
 
 INCOMING_HTML = '<center><h1>Wait<br>The contest is yet to start.</h1></center>'
-PAGE_NOT_FOUND = '<div style="height:50%"></div><center><h1>QAQ<br>What have you done...</h1></center>'
 
 reload(sys)
 sys.setdefaultencoding('utf-8')
@@ -21,7 +20,7 @@ def url2table(url):
     if url in m.keys():
         return m[url]
     else:
-        return 'ＯＪ 炸裂了'    
+        return 'ＯＪ 炸裂了'
 
 def fetch_table(url, contest_data):
     if contest_data.status == 'ended':

@@ -10,9 +10,7 @@
   <tbody>
     {% for clar in clarifications %}
     <tr>
-      <td>
-        {{ clar.asker }}
-      </td>
+      <td>{{ clar.asker }}</td>
       <td>{{ clar.question|linebreaks }}</td>
       <td>{{ clar.reply|linebreaks }}</td>
       <td>{{ clar.time }}</td>

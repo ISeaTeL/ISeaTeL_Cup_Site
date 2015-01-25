@@ -26,10 +26,10 @@ DEBUG = False
 
 TEMPLATE_DEBUG = False
 
-ALLOWED_HOSTS = ['*',]
+ALLOWED_HOSTS = ['*', ]
 
 # Sending email setting
-from password import GMAIL_PASSWORD 
+from password import GMAIL_PASSWORD
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_HOST_USER = 'iseatel@iseatel.org'
 EMAIL_HOST_PASSWORD = GMAIL_PASSWORD
@@ -40,7 +40,8 @@ EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 
 
 # Sending emails when error occurs
-ADMINS = (('henryyang', 'henryyang42@gmail.com'), ('hydai', 'z54981220@gmail.com'))
+ADMINS = (('henryyang', 'henryyang42@gmail.com'),
+          ('hydai', 'z54981220@gmail.com'))
 MANAGERS = ADMINS
 
 # Application definition
@@ -109,7 +110,5 @@ USE_TZ = True
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 MEDIA_URL = '/media/'
 STATIC_URL = '/static/'
-
-
 
 CRISPY_TEMPLATE_PACK = 'bootstrap3'

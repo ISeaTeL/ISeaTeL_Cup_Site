@@ -37,7 +37,7 @@ def signup_reply(sudo, request):
 
 def change(request, url_hash, g):
     sudo = get_object_or_404(Sudo, url_hash=url_hash)
-    msg = '欲修改資料者可用此url修改'
+    msg = ''
     F = SudoForm if g == '' else SpecialSudoForm
     if sudo:
         if request.method == 'POST':
@@ -48,7 +48,10 @@ def change(request, url_hash, g):
                 msg = '修改成功'
             else:
                 return render(request, 'sudo.html', {'sudoform': sudoform})
-
+        if sudo.count == 0:
+            msg = '<script>alert("您已成功傳送表單，欲修改資料者可用此url修改。確認信已寄至%s")</script>' % sudo.email
+        sudo.count += 1
+        sudo.save()
     return render(request, 'sudo.html', {'sudoform': F(instance=sudo), 'msg': msg})
 
 def create(request, g):
@@ -63,5 +66,5 @@ def create(request, g):
             return HttpResponseRedirect('/sudo/change/%s' % sudo.url_hash)
         else:
             return render(request, 'sudo.html', {'sudoform': sudoform})
-
-    return render(request, 'sudo.html', {'sudoform': F()})
+    msg = ''
+    return render(request, 'sudo.html', {'sudoform': F(), 'msg': msg})

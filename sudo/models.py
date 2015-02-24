@@ -16,5 +16,6 @@ class Sudo(models.Model):
     choices = models.ManyToManyField(Choices)
     url_hash = models.TextField()
     time = models.DateTimeField(default=datetime.now(), editable=True, auto_now_add=True)
+    count = models.IntegerField(default=0)
     def __unicode__(self):
         return '%s | %s' % (self.name, self.email)

@@ -19,6 +19,12 @@
 
     <script type="text/javascript" charset="utf-8">
     $(function() {
+        function updateData() {
+            data = '';
+            for (i = 0; i < 91; i++)
+                data += status[i];
+            $('#schedule').val(data);
+        }
         var busy = '<center><span class="glyphicon glyphicon-remove" aria-hidden="true"></span></center>';
         var free = '';
         var timeName = [
@@ -76,7 +82,9 @@
                 status[id] = '0';
                 $(target).html(free);
             }
+            updateData();
         });
+
         $('#loadData').click(function() {
             var rawData = $('#rawData td:nth-child(4)').text();
             var queryKey1 = ['M', 'T', 'W', 'R', 'F', 'S'];
@@ -93,7 +101,17 @@
                     }
                 };
             };
+            updateData();
         });
+
+        var currentStatus = $('#schedule').val();
+        for (var j = 0; j < currentStatus.length; j++) {
+            if (currentStatus[j] == '1') {
+                var target = '#' + j;
+                status[j] = '1';
+                $(target).html(busy);
+            }
+        };
     });
     </script>
 </head>
@@ -105,9 +123,12 @@
         <h4>使用方式</h4>
         <p>你可以直接點擊課表來改變狀態；或是使用 Pusheen autogen 幫你把課表輸入到下面來～</p>
     </div>
+
     <div class="row">
         <div class="col-lg-11" id="rawData" contenteditable style="border: 2px solid;">把選課結果貼到這裏（有M1M2在第四欄位的那種表格），按下 Autogen 就能幫你填喔！</div>
         <button class="btn btn-primary col-lg-1" id="loadData">Autogen!</button>
+        <a target="_blank" href="https://dl.dropboxusercontent.com/u/113630504/123.png">選課結果</a>長這樣
+
     </div>
     <hr>
     <div id="timeTable"></div>

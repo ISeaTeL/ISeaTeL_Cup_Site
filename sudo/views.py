@@ -7,7 +7,7 @@ from sudo.forms import *
 from sudo.models import *
 
 import hashlib
-# Create your views here.
+import json
 
 from django.core.mail import send_mail
 from django.core.mail import EmailMultiAlternatives
@@ -68,3 +68,15 @@ def create(request, g):
             return render(request, 'sudo.html', {'sudoform': sudoform})
     msg = ''
     return render(request, 'sudo.html', {'sudoform': F(), 'msg': msg})
+
+def query_schedule(request):
+    sudos = Sudo.objects.all()
+    print sudos
+    sums = [0]*91
+    sums_total = 0
+    if sudos:
+        for schedule in [sudo.schedule for sudo in sudos]:
+            sums_total += 1
+            for i in range(0, 91):
+                sums[i] += int(schedule[i])
+    return render(request, 'sums.html', {'sums': json.dumps(sums), 'sums_total': sums_total})

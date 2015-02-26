@@ -65,11 +65,27 @@
         tableContent += '</table>';
         $('#timeTable').html(tableContent);
 
+        var level = [];
+        for (var i = 0; i < 4; i++) {
+          level[i] = {{ sums_total }} * (i + 1) / 4;
+        };
+
         var currentStatus = {{ sums|safe }};
         for (var j = 0; j < currentStatus.length; j++) {
             var target = '#' + j;
             status[j] = '1';
             $(target).html('<center>' + currentStatus[j] + '</center>');
+            $(target).removeClass();
+            $(target).addClass('cell');
+            if (currentStatus[i] < level[0]) {
+              // Do nothing
+            } else if (currentStatus[i] < level[1]) {
+              $(target).addClass('info');
+            } else if (currentStatus[i] < level[2]) {
+              $(target).addClass('warning');
+            } else {
+              $(target).addClass('danger');
+            }
         };
     });
     </script>
